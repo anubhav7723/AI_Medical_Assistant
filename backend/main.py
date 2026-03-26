@@ -3,13 +3,14 @@ import traceback
 from pathlib import Path
 from typing import Any
 import numpy as np
-
+import json
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from ocr.extractor import extract_text_from_file, parse_medical_parameters
-
+from dotenv import load_dotenv
+load_dotenv()
 
 # ── App setup ─────────────────────────────────────────────────────
 app = FastAPI(
@@ -147,6 +148,16 @@ async def ocr_debug(file: UploadFile = File(...)):
         "lines": text.splitlines() # Line-by-line view
     }
 # ── 2. Predict ────────────────────────────────────────────────────
+
+def debias_probability(prob: float) -> float:
+    if prob < 15:
+        debiased = 25 + (prob / 15) * 5
+    elif prob > 70:
+        debiased = 60 + ((prob - 70) / 30) * 10
+    else:
+        debiased = prob
+    return round(debiased, 1)
+
 @app.post("/predict")
 def predict_endpoint(body: PredictRequest):
     """
@@ -165,55 +176,67 @@ def predict_endpoint(body: PredictRequest):
     predictions = []
     # ── Feature lists must match EXACTLY what each model was trained on ──────────
     ANEMIA_FEATURES = [
-        "Hemoglobin", "RBC", "MCV", "MCH", "MCHC", "Hematocrit",
-        # Add the remaining 8 features your model was trained with, e.g.:
-        "WBC", "Platelets", "RDW" , "Lymphocytes" , "Neutrophils" , "Neutrophils" , "PDW" ,"PCT"
-        # ... until you have 14 total
+    "Hemoglobin", "RBC", "WBC", "Platelets",
+    "Hematocrit", "MCV", "MCH", "MCHC",
+    "Neutrophils", "Lymphocytes",
+    "RDW", "PDW", "PCT" , "BMI"
     ]
 
     DIABETES_FEATURES = [
-        "Fasting Glucose", "HbA1c", "BMI",
-        # Add remaining 5 features to reach 8 total, e.g.:
-        "Age", "gender", "hypertension", "heart_disease", "smoking_history"
+        "HbA1c",           # parser returns "HbA1c"  ← was "HbA1c_level"  (mismatch fixed)
+        "Fasting Glucose",  # parser returns "Fasting Glucose" ← was "blood_glucose_level" (mismatch fixed)
+        "BMI",
+        "Gender", "Age", "Hypertension", "heart_disease", "smoking_history"
     ]
 
     HEART_FEATURES = [
-        "Total Cholesterol", "LDL", "HDL", "Triglycerides", "Systolic BP",
-        "height", "weight", "ap_hi", "ap_lo", "glucose","smoke","alco","active" , "age" , "gender" ,"id" , "cardio" , "hypertension"
-        # Add remaining 13 features to reach 18 total
+        "Total Cholesterol", "LDL", "HDL",
+        "Triglycerides", "Systolic BP",
+        "Diastolic BP" , "Glucose" , "Height" , "Weight" , "Gender" , "Hypertension"
     ]
 
     LIVER_FEATURES = [
-        "ALT", "AST", "Bilirubin", "Albumin", "BMI",
-        # Add remaining 17 features to reach 22 total
-        "height", "weight", "ap_hi", "ap_lo", "glucose","smoke","alco","active" , "age" , "gender" ,"id" , "cardio" , "hypertension" , "TSH" , "CRP" , "BUN" , "creatinine"
+        "ALT", "AST", "Bilirubin", "Albumin",
+        "BMI", "CRP", "BUN", "Creatinine", "TSH",
+        "Total Protein", "AG Ratio", "ALP",
+        "Height", "Weight", "Systolic BP", "Diastolic BP", "Smoke", "alco", "active", "id",
+        "cardio", "hypertension"
     ]
 
     # INFECTION_FEATURES = [
     #     "WBC", "Neutrophils", "Lymphocytes", "CRP", "Platelets",
     #     # Add remaining features
     # ]
-
+    print("PARAMS KEYS:", list(params.keys()))
+    print("LIVER FEATURES:", LIVER_FEATURES)
     def run_model(model, model_name, disease_name, feature_names, algo_name):
         """Helper to run a model with NaN-padded features."""
         try:
             if model is None:
                 raise RuntimeError("Model not loaded")
-            
+
             features = []
+            found_count = 0                          # ← NEW: track how many params exist in report
             for name in feature_names:
-                val = params.get(name, 0.0)
-                if val is None or (isinstance(val, float) and np.isnan(val)):
-                    val = 0.0
-                features.append(float(val))  # ← force cast to Python float
-            
-            # Reshape into proper 2D numpy array (1 sample, N features)
+                val = params.get(name)
+                if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                    found_count += 1                 # ← NEW: this param was actually in the report
+                    features.append(float(val))
+                else:
+                    features.append(0.0)
+
+            # ← NEW: skip this disease entirely if no relevant params found in report
+            if found_count == 0:
+                return {"disease": disease_name, "score": None, "skip": True}
+
             feature_array = np.array(features, dtype=np.float64).reshape(1, -1)
-            
+
             prob  = model.predict_proba(feature_array)[0][1]
-            score = round(float(prob) * 100, 1)  # ← cast prob too
+            score = round(float(prob) * 100, 1)
+            score = debias_probability(score)
             return {"disease": disease_name, "score": score, "model": algo_name}
         except Exception as e:
+            print(f"❌ MODEL ERROR [{disease_name}]: {str(e)}")  # ← ADD THIS
             return {"disease": disease_name, "score": None, "error": str(e)}
 
     predictions.append(run_model(model_anemia,    "anemia",    "Anemia",       ANEMIA_FEATURES,    "Random Forest"))
@@ -228,41 +251,45 @@ def predict_endpoint(body: PredictRequest):
 # ── 3. Summarize ──────────────────────────────────────────────────
 @app.post("/summarize")
 def summarize_endpoint(body: SummarizeRequest):
-    """
-    Takes OCR text + ML predictions and returns an LLM-generated summary.
-    Wire up your Groq / Llama / Mixtral API here.
-    """
-    # ── TODO: replace this stub with your LLM call ──────────────
-    # Example with Groq:
-    #
-    # from groq import Groq
-    # client = Groq(api_key=os.environ["GROQ_API_KEY"])
-    #
-    # prompt = f"""
-    # You are a medical assistant. Analyze this report and the ML predictions.
-    # Report text:
-    # {body.text}
-    #
-    # ML Predictions:
-    # {body.predictions}
-    #
-    # Return a JSON with:
-    # - overview: 2-3 sentence clinical summary
-    # - abnormal: list of {{param, value, note}} for out-of-range values
-    # - suggestions: list of 5-6 actionable recommendations
-    # """
-    #
-    # response = client.chat.completions.create(
-    #     model="llama3-8b-8192",
-    #     messages=[{"role": "user", "content": prompt}],
-    # )
-    # return json.loads(response.choices[0].message.content)
-    # ──────────────────────────────────────────────────────────────
+    from groq import Groq
+    import re
 
-    raise HTTPException(
-        status_code=501,
-        detail="Summarization not yet implemented. Wire up your LLM in main.py /summarize route."
+    client = Groq(api_key=os.environ["GROQ_API_KEY"])
+
+    prompt = f"""
+    You are a medical assistant. Analyze this report and the ML predictions.
+    Report text:
+    {body.text}
+
+    ML Predictions:
+    {body.predictions}
+
+    Return a JSON with:
+    - overview: 2-3 sentence clinical summary
+    - abnormal: list of {{param, value, note}} for out-of-range values
+    - suggestions: list of 5-6 actionable recommendations
+
+    Respond ONLY with a valid JSON object. No explanation, no markdown, no code fences.
+    """
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
     )
+
+    raw = response.choices[0].message.content
+
+    if not raw or not raw.strip():
+        raise HTTPException(status_code=500, detail="Model returned an empty response")
+
+    # Strip markdown code fences if present
+    raw = re.sub(r"```json\s*|\s*```", "", raw).strip()
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return {"summary": raw}
+
 
 
 # ── 4. Chat (Mediee) ──────────────────────────────────────────────

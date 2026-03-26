@@ -198,48 +198,152 @@ def extract_text_from_file(file_bytes: bytes, filename: str) -> str:
 # ── Medical parameter parser ──────────────────────────────────────
 
 PARAM_PATTERNS = [
-    # Strict patterns: parameter name → optional separator → first number only
-    # [^\d]{0,10} limits gap between name and value to prevent cross-row merging
-    (r'hemoglobin\s*[:\-]?\s*([\d.]+)',            'Hemoglobin'),
-    (r'\brbc\s*[:\-]?\s*([\d.]+)',                 'RBC'),
-    (r'\bwbc\s*[:\-]?\s*([\d.]+)',                 'WBC'),
-    (r'platelets?\s*[:\-]?\s*([\d,]+)',            'Platelets'),
-    (r'hematocrit\s*[:\-]?\s*([\d.]+)',            'Hematocrit'),
-    (r'packed\s*cell\s*volume\s*[:\-]?\s*([\d.]+)','Hematocrit'),  # PCV alias
-    (r'\bpcv\s*[:\-]?\s*([\d.]+)',                 'Hematocrit'),  # PCV alias
-    (r'\bmcv\s*[:\-]?\s*([\d.]+)',                 'MCV'),
-    (r'\bpcv\s*[:\-]?\s*([\d.]+)',                 'MCV'),
-    (r'\bmch\b\s*[:\-]?\s*([\d.]+)',               'MCH'),
-    (r'\bch\b\s*[:\-]?\s*([\d.]+)',               'MCH'),
-    (r'\bmchc\s*[:\-]?\s*([\d.]+)',                'MCHC'),
-    (r'\bchc\s*[:\-]?\s*([\d.]+)',                'MCHC'),
-    (r'fasting\s*(?:blood\s*)?glucose\s*[:\-]?\s*([\d.]+)', 'Fasting Glucose'),
-    (r'blood\s*glucose\s*[:\-]?\s*([\d.]+)',       'Fasting Glucose'),
-    (r'hba1c\s*[:\-]?\s*([\d.]+)',                 'HbA1c'),
-    (r'glycated\s*haemoglobin\s*[:\-]?\s*([\d.]+)','HbA1c'),
-    (r'total\s*cholesterol\s*[:\-]?\s*([\d.]+)',   'Total Cholesterol'),
-    (r'\bldl\s*[:\-]?\s*([\d.]+)',                 'LDL'),
-    (r'\bhdl\s*[:\-]?\s*([\d.]+)',                 'HDL'),
-    (r'triglycerides?\s*[:\-]?\s*([\d.]+)',        'Triglycerides'),
-    (r'creatinine\s*[:\-]?\s*([\d.]+)',            'Creatinine'),
-    (r'\begfr\s*[:\-]?\s*([\d.]+)',                'eGFR'),
-    (r'\bbun\b\s*[:\-]?\s*([\d.]+)',               'BUN'),
-    (r'blood\s*urea\s*nitrogen\s*[:\-]?\s*([\d.]+)','BUN'),
-    (r'\balt\b\s*[:\-]?\s*([\d.]+)',               'ALT'),
-    (r'alanine\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)', 'ALT'),
-    (r'\bast\b\s*[:\-]?\s*([\d.]+)',               'AST'),
-    (r'aspartate\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)', 'AST'),
-    (r'bilirubin\s*[:\-]?\s*([\d.]+)',             'Bilirubin'),
-    (r'albumin\s*[:\-]?\s*([\d.]+)',               'Albumin'),
-    (r'\btsh\b\s*[:\-]?\s*([\d.]+)',               'TSH'),
-    (r'\bcrp\b\s*[:\-]?\s*([\d.]+)',               'CRP'),
-    (r'c.reactive\s*protein\s*[:\-]?\s*([\d.]+)',  'CRP'),
-    (r'\bbmi\b\s*[:\-]?\s*([\d.]+)',               'BMI'),
-    (r'systolic\s*[:\-]?\s*([\d]+)',               'Systolic BP'),
-    (r'neutrophils?\s*[:\-]?\s*([\d.]+)',          'Neutrophils'),
-    (r'lymphocytes?\s*[:\-]?\s*([\d.]+)',          'Lymphocytes'),
-]
 
+    # ── HAEMATOLOGY (Anemia model) ────────────────────────────────────────────
+
+    (r'hemoglobin\s*[:\-]?\s*([\d.]+)',                         'Hemoglobin'),
+    (r'\bhgb\s*[:\-]?\s*([\d.]+)',                              'Hemoglobin'),  # HGB alias
+    (r'\bhb\b\s*[:\-]?\s*([\d.]+)',                             'Hemoglobin'),  # Hb alias
+
+    (r'\brbc\s*[:\-]?\s*([\d.]+)',                              'RBC'),
+    (r'red\s*blood\s*cell(?:s)?\s*[:\-]?\s*([\d.]+)',           'RBC'),
+
+    (r'\bwbc\s*[:\-]?\s*([\d.]+)',                              'WBC'),
+    (r'white\s*blood\s*cell(?:s)?\s*[:\-]?\s*([\d.]+)',         'WBC'),
+    (r'total\s*leukocyte\s*count\s*[:\-]?\s*([\d.]+)',          'WBC'),  # TLC alias
+    (r'\btlc\s*[:\-]?\s*([\d.]+)',                              'WBC'),  # TLC alias
+
+    (r'platelets?\s*[:\-]?\s*([\d,]+)',                         'Platelets'),
+    (r'platelet\s*count\s*[:\-]?\s*([\d,]+)',                   'Platelets'),
+    (r'\bplt\s*[:\-]?\s*([\d,]+)',                              'Platelets'),  # PLT alias
+
+    (r'hematocrit\s*[:\-]?\s*([\d.]+)',                         'Hematocrit'),
+    (r'packed\s*cell\s*volume\s*[:\-]?\s*([\d.]+)',             'Hematocrit'),  # PCV alias
+    (r'\bpcv\s*[:\-]?\s*([\d.]+)',                              'Hematocrit'),  # PCV alias
+
+    (r'\bmcv\s*[:\-]?\s*([\d.]+)',                              'MCV'),
+    (r'mean\s*corp(?:uscular)?\s*volume\s*[:\-]?\s*([\d.]+)',   'MCV'),
+
+    (r'\bmch\b\s*[:\-]?\s*([\d.]+)',                            'MCH'),
+    (r'mean\s*corp(?:uscular)?\s*h(?:a?emoglobin)?\b\s*[:\-]?\s*([\d.]+)', 'MCH'),
+
+    (r'\bmchc\s*[:\-]?\s*([\d.]+)',                             'MCHC'),
+    (r'mean\s*corp(?:uscular)?\s*h(?:a?emoglobin)?\s*conc\w*\s*[:\-]?\s*([\d.]+)', 'MCHC'),
+
+    (r'neutrophils?\s*[:\-]?\s*([\d.]+)',                       'Neutrophils'),
+    (r'\bneut\s*[:\-]?\s*([\d.]+)',                             'Neutrophils'),  # NEUT alias
+
+    (r'lymphocytes?\s*[:\-]?\s*([\d.]+)',                       'Lymphocytes'),
+    (r'\blymp?\s*[:\-]?\s*([\d.]+)',                            'Lymphocytes'),  # LYM alias
+
+    (r'monocytes?\s*[:\-]?\s*([\d.]+)',                         'Monocytes'),
+    (r'\bmono\s*[:\-]?\s*([\d.]+)',                             'Monocytes'),
+
+    (r'eosinophils?\s*[:\-]?\s*([\d.]+)',                       'Eosinophils'),
+    (r'\beos\s*[:\-]?\s*([\d.]+)',                              'Eosinophils'),
+
+    (r'basophils?\s*[:\-]?\s*([\d.]+)',                         'Basophils'),
+    (r'\bbaso\s*[:\-]?\s*([\d.]+)',                             'Basophils'),
+
+    (r'\brdw\s*[:\-]?\s*([\d.]+)',                              'RDW'),
+    (r'red\s*(?:cell\s*)?distribution\s*width\s*[:\-]?\s*([\d.]+)', 'RDW'),
+
+    # ── DIABETES model ────────────────────────────────────────────────────────
+
+    (r'hba1c\s*[:\-]?\s*([\d.]+)',                              'HbA1c'),
+    (r'glycated\s*h(?:a?e)moglobin\s*[:\-]?\s*([\d.]+)',        'HbA1c'),
+    (r'glycoh(?:a?e)moglobin\s*[:\-]?\s*([\d.]+)',              'HbA1c'),
+    (r'a1c\s*[:\-]?\s*([\d.]+)',                                'HbA1c'),  # A1C alias
+
+    (r'fasting\s*(?:blood\s*)?(?:plasma\s*)?glucose\s*[:\-]?\s*([\d.]+)', 'Fasting Glucose'),
+    (r'blood\s*glucose\s*(?:fasting\s*)?[:\-]?\s*([\d.]+)',     'Fasting Glucose'),
+    (r'f(?:asting)?\s*b(?:lood)?\s*s(?:ugar)?\s*[:\-]?\s*([\d.]+)', 'Fasting Glucose'),  # FBS alias
+    (r'\bfbs\s*[:\-]?\s*([\d.]+)',                              'Fasting Glucose'),  # FBS alias
+    (r'random\s*blood\s*(?:glucose|sugar)\s*[:\-]?\s*([\d.]+)', 'Fasting Glucose'),  # RBS alias
+
+    (r'\bbmi\b\s*[:\-]?\s*([\d.]+)',                            'BMI'),
+    (r'body\s*mass\s*index\s*[:\-]?\s*([\d.]+)',                'BMI'),
+
+    # ── HEART model ───────────────────────────────────────────────────────────
+
+    (r'total\s*cholesterol\s*[:\-]?\s*([\d.]+)',                'Total Cholesterol'),
+    (r'cholesterol\s*[:\-]?\s*([\d.]+)',                        'Total Cholesterol'),  # bare alias
+
+    (r'\bldl\s*[:\-]?\s*([\d.]+)',                              'LDL'),
+    (r'ldl\s*cholesterol\s*[:\-]?\s*([\d.]+)',                  'LDL'),
+    (r'low\s*density\s*lipoprotein\s*[:\-]?\s*([\d.]+)',        'LDL'),
+
+    (r'\bhdl\s*[:\-]?\s*([\d.]+)',                              'HDL'),
+    (r'hdl\s*cholesterol\s*[:\-]?\s*([\d.]+)',                  'HDL'),
+    (r'high\s*density\s*lipoprotein\s*[:\-]?\s*([\d.]+)',       'HDL'),
+
+    (r'triglycerides?\s*[:\-]?\s*([\d.]+)',                     'Triglycerides'),
+    (r'\btg\b\s*[:\-]?\s*([\d.]+)',                             'Triglycerides'),  # TG alias
+    (r'\bvldl\s*[:\-]?\s*([\d.]+)',                             'Triglycerides'),  # VLDL proxy
+
+    (r'systolic\s*(?:blood\s*pressure\s*)?[:\-]?\s*([\d]+)',    'Systolic BP'),
+    (r'(?:bp|blood\s*pressure)[^\d]{0,15}([\d]{2,3})\s*/\s*[\d]+', 'Systolic BP'),  # BP 120/80 → 120
+    (r'sbp\s*[:\-]?\s*([\d]+)',                                 'Systolic BP'),  # SBP alias
+
+    (r'diastolic\s*(?:blood\s*pressure\s*)?[:\-]?\s*([\d]+)',   'Diastolic BP'),
+    (r'(?:bp|blood\s*pressure)[^\d]{0,15}[\d]{2,3}\s*/\s*([\d]+)', 'Diastolic BP'),  # BP 120/80 → 80
+    (r'dbp\s*[:\-]?\s*([\d]+)',                                 'Diastolic BP'),  # DBP alias
+
+    # ── LIVER model ───────────────────────────────────────────────────────────
+
+    (r'\bast\b\s*[:\-]?\s*([\d.]+)',                            'AST'),
+    (r'\bsgot\b\s*[:\-]?\s*([\d.]+)',                           'AST'),
+    (r's\.?g\.?[o0]\.?t\s*[:\-]?\s*([\d.]+)',                  'AST'),          # handles S.G.O.T and S.G.0.T (zero/O confusion)
+    (r'aspartate\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)',  'AST'),
+
+    (r'\bast\b\s*[:\-]?\s*([\d.]+)',                            'AST'),
+    (r'\bsgot\b\s*[:\-]?\s*([\d.]+)',                           'AST'),  # SGOT alias (common in Indian reports)
+    (r'aspartate\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)',  'AST'),
+
+    (r'(?:total\s*)?bilirubin\s*[:\-]?\s*([\d.]+)',             'Bilirubin'),
+    (r'serum\s*bilirubin\s*[:\-]?\s*([\d.]+)',                  'Bilirubin'),
+    (r'bilirubin\w*\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',    'Bilirubin'),  # merged: "BilirubinTotal 0.2-1.00 ---0.87"
+
+    (r'albumin\s*[:\-]?\s*([\d.]+)',                            'Albumin'),
+    (r'serum\s*albumin\s*[:\-]?\s*([\d.]+)',                    'Albumin'),
+    (r'albumin\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',         'Albumin'),    # merged: "Albumin 3.5-5.5 ---4.22"
+    
+    (r'alubumin\s*[:\-]?\s*([\d.]+)',                            'Albumin'),
+    (r'serum\s*alubumin\s*[:\-]?\s*([\d.]+)',                    'Albumin'),
+    (r'alubumin\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',         'Albumin'),    # merged: "Albumin 3.5-5.5 ---4.22"
+
+
+    (r'total\s*prot(?:e[iy]n)?s?\s*[:\-]?\s*([\d.]+)',         'Total Protein'),
+    (r'serum\s*prot(?:e[iy]n)?s?\s*[:\-]?\s*([\d.]+)',         'Total Protein'),
+    (r'protein\w*\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',      'Total Protein'), # merged: "ProteinTotal 6.0-8.0 ---56.17"
+
+    (r'a\s*/\s*g\s*ratio\s*[:\-]?\s*([\d.]+)',                  'AG Ratio'),
+    (r'albumin\s*/\s*globulin\s*[:\-]?\s*([\d.]+)',             'AG Ratio'),
+
+    (r'alkaline\s*phosphatase\s*[:\-]?\s*([\d.]+)',             'ALP'),
+    (r'\balk\s*phos\w*\s*[:\-]?\s*([\d.]+)',                   'ALP'),
+    (r'\balp\b\s*[:\-]?\s*([\d.]+)',                            'ALP'),
+    (r'\balkphos\b\s*[:\-]?\s*([\d.]+)',                        'ALP'),
+    (r'alkaline\w*\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',     'ALP'),          # merged: "AlkalinePhosphatase 3.5-13 ---8.40"
+
+    (r'\bcrp\b\s*[:\-]?\s*([\d.]+)',                            'CRP'),
+    (r'c[\.\-]?reactive\s*protein\s*[:\-]?\s*([\d.]+)',         'CRP'),
+
+    (r'\bbun\b\s*[:\-]?\s*([\d.]+)',                            'BUN'),
+    (r'blood\s*urea\s*nitrogen\s*[:\-]?\s*([\d.]+)',            'BUN'),
+    (r'\burea\b\s*[:\-]?\s*([\d.]+)',                           'BUN'),  # Urea alias (Indian reports)
+
+    (r'creatinine\s*[:\-]?\s*([\d.]+)',                         'Creatinine'),
+    (r'serum\s*creatinine\s*[:\-]?\s*([\d.]+)',                 'Creatinine'),
+    (r'\bscr\b\s*[:\-]?\s*([\d.]+)',                            'Creatinine'),  # SCr alias
+
+    (r'\begfr\b\s*[:\-]?\s*([\d.]+)',                           'eGFR'),
+    (r'estimated\s*gfr\s*[:\-]?\s*([\d.]+)',                    'eGFR'),
+
+    (r'\btsh\b\s*[:\-]?\s*([\d.]+)',                            'TSH'),
+    (r'thyroid\s*stimulating\s*hormone\s*[:\-]?\s*([\d.]+)',    'TSH'),
+    (r'thyrotropin\s*[:\-]?\s*([\d.]+)',                        'TSH'),
+]
 
 def parse_medical_parameters(text: str) -> dict:
     """

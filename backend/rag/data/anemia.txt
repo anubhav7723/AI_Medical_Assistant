@@ -1,0 +1,49 @@
+ANEMIA
+
+Definition:
+Anemia is a condition where the hemoglobin level is lower than normal, reducing oxygen transport in the body.
+
+Normal Ranges:
+Hemoglobin:
+- Men: 13–17 g/dL
+- Women: 12–15 g/dL
+
+RBC:
+- 4.5–5.9 million cells/mcL (men)
+- 4.1–5.1 million cells/mcL (women)
+
+Hematocrit:
+- Men: 40–50%
+- Women: 36–44%
+
+Key Parameters:
+Hemoglobin, RBC, Hematocrit, MCV, MCH, MCHC, RDW
+
+Additional Indicators:
+WBC, Platelets, Neutrophils, Lymphocytes, PDW, PCT, BMI
+
+Symptoms:
+Fatigue, weakness, pale skin, dizziness, shortness of breath
+
+Causes:
+Iron deficiency, blood loss, chronic disease, vitamin deficiency
+
+ML Feature Insights:
+- Low Hemoglobin → strong indicator of anemia
+- Low MCV → microcytic anemia
+- High RDW → variation in RBC size
+- Low RBC → reduced oxygen capacity
+
+Lifestyle & Diet:
+Iron-rich foods: spinach, lentils, red meat
+Vitamin B12 and folate intake recommended
+
+User Questions:
+Q: Why is my hemoglobin low?
+A: Low hemoglobin indicates reduced oxygen-carrying capacity, often due to iron deficiency.
+
+Q: What should I eat to improve anemia?
+A: Include iron-rich foods and vitamin C for better absorption.
+
+Q: Is anemia dangerous?
+A: Moderate to severe anemia can affect heart and brain function if untreated.

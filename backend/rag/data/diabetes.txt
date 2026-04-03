@@ -1,0 +1,48 @@
+DIABETES
+
+Definition:
+Diabetes is a chronic condition characterized by high blood glucose levels.
+
+Normal Ranges:
+Fasting Glucose:
+- Normal: 70–100 mg/dL
+- Prediabetes: 100–125 mg/dL
+- Diabetes: >126 mg/dL
+
+HbA1c:
+- Normal: <5.7%
+- Prediabetes: 5.7–6.4%
+- Diabetes: ≥6.5%
+
+Key Parameters:
+HbA1c, Fasting Glucose, BMI, Age
+
+Additional Factors:
+Gender, Hypertension, Heart Disease, Smoking History
+
+Symptoms:
+Frequent urination, excessive thirst, fatigue, blurred vision
+
+Causes:
+Insulin resistance, obesity, genetics, sedentary lifestyle
+
+ML Feature Insights:
+- High HbA1c → long-term glucose elevation
+- High fasting glucose → immediate diabetes indicator
+- High BMI → obesity-related diabetes risk
+
+Complications:
+Heart disease, kidney failure, nerve damage
+
+Lifestyle & Diet:
+Reduce sugar intake, exercise regularly, maintain healthy weight
+
+User Questions:
+Q: What does high HbA1c mean?
+A: It indicates long-term elevated blood sugar levels.
+
+Q: Is my glucose level dangerous?
+A: Levels above 126 mg/dL may indicate diabetes.
+
+Q: How can I reduce diabetes risk?
+A: Maintain diet control, exercise, and weight management.

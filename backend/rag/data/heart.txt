@@ -1,0 +1,45 @@
+HEART DISEASE (CARDIOVASCULAR RISK)
+
+Definition:
+Heart disease refers to conditions affecting blood vessels and heart function, often due to plaque buildup.
+
+Normal Ranges:
+Total Cholesterol: <200 mg/dL
+LDL (Bad Cholesterol): <100 mg/dL
+HDL (Good Cholesterol): >40 mg/dL (men), >50 mg/dL (women)
+Triglycerides: <150 mg/dL
+
+Blood Pressure:
+- Normal: 120/80 mmHg
+- High: ≥140/90 mmHg
+
+Key Parameters:
+Total Cholesterol, LDL, HDL, Triglycerides, Systolic BP, Diastolic BP
+
+Additional Factors:
+Glucose, BMI (via height & weight), Gender, Hypertension
+
+Symptoms:
+Chest pain, shortness of breath, fatigue
+
+Causes:
+High cholesterol, hypertension, smoking, diabetes
+
+ML Feature Insights:
+- High LDL → increased plaque formation
+- Low HDL → reduced protection
+- High BP → strain on heart
+- High glucose → cardiovascular risk
+
+Prevention:
+Exercise, balanced diet, reduce saturated fats, avoid smoking
+
+User Questions:
+Q: Is high cholesterol dangerous?
+A: Yes, it increases risk of heart disease and stroke.
+
+Q: What is good HDL level?
+A: Above 40–50 mg/dL is considered protective.
+
+Q: How to reduce heart risk?
+A: Exercise, healthy diet, control BP and cholesterol.

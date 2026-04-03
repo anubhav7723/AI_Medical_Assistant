@@ -1,0 +1,41 @@
+LIVER DISEASE
+
+Definition:
+Liver disease includes conditions that damage liver function, affecting metabolism and detoxification.
+
+Normal Ranges:
+ALT: 7–56 U/L
+AST: 10–40 U/L
+Bilirubin: 0.1–1.2 mg/dL
+Albumin: 3.5–5.0 g/dL
+
+Key Parameters:
+ALT, AST, Bilirubin, Albumin, ALP, Total Protein, AG Ratio
+
+Additional Indicators:
+BMI, CRP, Creatinine, BUN, TSH, Blood Pressure, Alcohol use
+
+Symptoms:
+Jaundice, fatigue, abdominal pain, swelling
+
+Causes:
+Alcohol abuse, hepatitis, fatty liver, obesity
+
+ML Feature Insights:
+- High ALT/AST → liver damage
+- High bilirubin → impaired liver function
+- Low albumin → poor liver synthesis
+- High ALP → bile duct issues
+
+Lifestyle:
+Avoid alcohol, maintain healthy weight, balanced diet
+
+User Questions:
+Q: What does high ALT mean?
+A: It indicates liver cell damage.
+
+Q: Is high bilirubin serious?
+A: It may cause jaundice and indicates liver dysfunction.
+
+Q: How to improve liver health?
+A: Avoid alcohol, eat healthy, and exercise regularly.

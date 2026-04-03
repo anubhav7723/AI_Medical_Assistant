@@ -9,3 +9,7 @@ faiss-cpu
 groq
 pdfplumber
 paddleocr
+faiss-cpu>=1.7.4
+sentence-transformers>=2.7.0
+anthropic>=0.28.0
+numpy>=1.24.0

@@ -1,21 +1,41 @@
 import { useState, useRef, useEffect } from 'react';
 
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+const BASE = import.meta.env.VITE_API_URL ?? `${import.meta.env.VITE_API_URL}`;
 
 async function sendMessage(messages) {
+  // Build the messages array to send
+  // If report context exists, prepend it as a system message
+  const payload = [];
+ 
+  if (reportContext) {
+    payload.push({
+      role: 'system',
+      content: JSON.stringify({
+        ml_predictions:  reportContext.predictions  ?? [],
+        report_summary:  reportContext.summary      ?? '',
+        parameters:      reportContext.parameters   ?? {},
+      }),
+    });
+  }
+ 
+  // Add conversation history (skip any existing system messages)
+  payload.push(...messages.filter(m => m.role !== 'system'));
+ 
   const res = await fetch(`${BASE}/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages: payload }),
   });
+ 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.detail ?? `Chat failed (HTTP ${res.status})`);
   }
-  return res.json(); // { reply: string }
+  return res.json(); // { reply, rag_sources }
 }
 
-export default function Chatbot() {
+export default function Chatbot({ reportContext = null }) {
+
   const [open,     setOpen]     = useState(false);
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hi! I\'m Mediee. Ask me anything about your medical report or health concerns.' }
@@ -25,6 +45,36 @@ export default function Chatbot() {
   const [error,    setError]    = useState('');
   const bottomRef               = useRef(null);
   const inputRef                = useRef(null);
+
+  // ── sendMessage lives inside component → has access to reportContext ──
+  async function sendMessage(msgs) {
+    const payload = [];
+
+    if (reportContext) {
+      payload.push({
+        role: 'system',
+        content: JSON.stringify({
+          ml_predictions: reportContext.predictions ?? [],
+          report_summary: reportContext.summary     ?? '',
+          parameters:     reportContext.parameters  ?? {},
+        }),
+      });
+    }
+
+    payload.push(...msgs.filter(m => m.role !== 'system'));
+
+    const res = await fetch(`${BASE}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: payload }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail ?? `Chat failed (HTTP ${res.status})`);
+    }
+    return res.json();
+  }
 
   // Auto-scroll to bottom on new message
   useEffect(() => {

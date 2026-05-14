@@ -67,7 +67,7 @@ export default function RiskSection({ ocrSuccess, status, predictions, error, on
     <div className="fade-up">
       <div className="divider">
         <div className="divider-line" />
-        <span className="divider-label">Risk Prediction</span>
+        <span className="divider-label"> ML Risk Prediction</span>
         <div className="divider-line" />
       </div>
 

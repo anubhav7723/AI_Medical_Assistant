@@ -145,7 +145,13 @@ export default function App() {
 
       </div>
       {/* Mediee chatbot — fixed bottom right */}
-      <Chatbot />
+      <Chatbot
+        reportContext={{
+          predictions: predictions,                      // ← your useState: setPredictions
+          summary:     summary?.overview ?? '',          // ← your useState: setSummary (overview field from /summarize)
+          parameters:  summary?.abnormal ?? {},          // ← abnormal params from /summarize
+        }}
+      />
     </>
   );
 }

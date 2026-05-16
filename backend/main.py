@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from ocr.extractor import extract_text_from_file, parse_medical_parameters
 from dotenv import load_dotenv
 load_dotenv()
+
 try:
     from rag.retriever import retrieve_for_diseases, format_context
     RAG_READY = True

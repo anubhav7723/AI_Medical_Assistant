@@ -1,41 +1,429 @@
-LIVER DISEASE
+LIVER DISEASE - COMPREHENSIVE MEDICAL KNOWLEDGE BASE
+(With WHO Guidelines Reference)
+Last Updated: 2024
 
-Definition:
-Liver disease includes conditions that damage liver function, affecting metabolism and detoxification.
+=======================================================
+SECTION 1: DEFINITION & OVERVIEW
+=======================================================
 
-Normal Ranges:
-ALT: 7–56 U/L
-AST: 10–40 U/L
-Bilirubin: 0.1–1.2 mg/dL
-Albumin: 3.5–5.0 g/dL
+Liver disease refers to any condition that damages liver structure or impairs liver function. The liver is the body's primary metabolic organ — it filters toxins, produces bile for digestion, synthesizes proteins (including clotting factors and albumin), metabolizes drugs and hormones, and stores glycogen for glucose regulation.
 
-Key Parameters:
-ALT, AST, Bilirubin, Albumin, ALP, Total Protein, AG Ratio
+WHO Definition and Context:
+Liver diseases encompass a broad spectrum from acute conditions (acute hepatitis, liver failure) to chronic progressive diseases (cirrhosis, liver cancer). WHO identifies viral hepatitis as a major public health priority, with hepatitis B and C alone causing more than 1.1 million deaths annually.
 
-Additional Indicators:
-BMI, CRP, Creatinine, BUN, TSH, Blood Pressure, Alcohol use
+WHO Global Burden:
+- Liver disease causes approximately 2 million deaths per year worldwide
+- Viral hepatitis (B and C) accounts for 1.1 million deaths
+- Cirrhosis and its complications account for ~1 million deaths
+- Liver cancer (hepatocellular carcinoma) is the 6th most common cancer and 3rd leading cause of cancer death
+- Non-alcoholic Fatty Liver Disease (NAFLD) affects ~25% of the global adult population (WHO estimate)
+- India carries the world's largest burden of viral hepatitis B (4th globally) and is among the highest for alcohol-related liver disease
 
-Symptoms:
-Jaundice, fatigue, abdominal pain, swelling
+Types of Liver Disease:
+1. Non-Alcoholic Fatty Liver Disease (NAFLD): Fat accumulation without alcohol use — spectrum from simple steatosis to NASH to cirrhosis
+2. Non-Alcoholic Steatohepatitis (NASH): NAFLD with inflammation and liver cell damage
+3. Alcoholic Liver Disease (ALD): Fatty liver → alcoholic hepatitis → cirrhosis from chronic alcohol use
+4. Viral Hepatitis: Hepatitis A, B, C, D, E — viral infections causing liver inflammation
+5. Autoimmune Hepatitis: Immune system attacks liver cells
+6. Cirrhosis: Irreversible scarring of liver from chronic damage — endpoint of many liver diseases
+7. Liver Failure (Acute or Chronic): Severe loss of liver function
+8. Hepatocellular Carcinoma (HCC): Primary liver cancer, usually on background of cirrhosis
+9. Cholestatic Liver Disease: Bile flow obstruction — Primary Biliary Cholangitis (PBC), Primary Sclerosing Cholangitis (PSC)
+10. Drug-Induced Liver Injury (DILI): From medications (acetaminophen, antibiotics, statins, herbal remedies)
+11. Wilson's Disease: Genetic copper accumulation
+12. Hemochromatosis: Genetic iron overload
 
-Causes:
-Alcohol abuse, hepatitis, fatty liver, obesity
+=======================================================
+SECTION 2: WHO DIAGNOSTIC PARAMETERS & NORMAL RANGES
+=======================================================
 
-ML Feature Insights:
-- High ALT/AST → liver damage
-- High bilirubin → impaired liver function
-- Low albumin → poor liver synthesis
-- High ALP → bile duct issues
+Liver Function Tests (LFTs):
 
-Lifestyle:
-Avoid alcohol, maintain healthy weight, balanced diet
+ALT (Alanine Aminotransferase) — Primary marker of hepatocellular damage:
+- Normal: 7–56 U/L (some labs: 7–40 U/L)
+- Mild elevation (1–3x upper normal): Fatty liver, medications, mild hepatitis
+- Moderate elevation (3–10x): Active hepatitis, alcoholic hepatitis, autoimmune hepatitis
+- Severe elevation (>10x): Acute viral hepatitis, ischemic hepatitis (shock liver), toxic liver injury
 
-User Questions:
+AST (Aspartate Aminotransferase) — Also found in heart and muscle:
+- Normal: 10–40 U/L
+- AST:ALT ratio:
+  - >2:1 = Alcoholic liver disease (alcohol impairs B6, needed for ALT synthesis)
+  - 1:1 or ALT > AST = Viral or non-alcoholic liver disease
+  - >10:1 = Consider ischemic hepatitis or Wilson's disease
+
+ALP (Alkaline Phosphatase) — Marker of bile duct disease and liver infiltration:
+- Normal: 44–147 U/L
+- Elevated in: Cholestasis (bile obstruction), liver cancer, bone disease, pregnancy
+- Isolated ALP elevation (normal ALT/AST) = likely bone origin or bile duct problem
+
+GGT (Gamma-Glutamyl Transferase) — Sensitive marker of alcohol use and cholestasis:
+- Normal: Men 8–61 U/L; Women 5–36 U/L
+- Highly elevated by alcohol (even moderate consumption)
+- Elevated in cholestasis, biliary obstruction, certain medications
+
+Bilirubin — Breakdown product of hemoglobin:
+- Total Bilirubin: 0.1–1.2 mg/dL (2–21 µmol/L)
+- Direct (Conjugated) Bilirubin: 0–0.3 mg/dL
+- Indirect (Unconjugated) Bilirubin: 0.1–0.9 mg/dL
+- Interpretation:
+  - >2.5 mg/dL → clinical jaundice (yellow skin/sclera)
+  - Elevated direct bilirubin = hepatocellular or cholestatic disease
+  - Elevated indirect bilirubin = hemolysis or Gilbert's syndrome (benign)
+
+Albumin — Marker of liver synthetic function:
+- Normal: 3.5–5.0 g/dL
+- Low albumin (<3.5 g/dL) = impaired liver protein synthesis → cirrhosis, malnutrition, nephrotic syndrome
+- Half-life of 20 days — reflects chronic function rather than acute changes
+
+Total Protein:
+- Normal: 6.0–8.3 g/dL
+- Albumin + Globulin = Total Protein
+
+A/G Ratio (Albumin to Globulin Ratio):
+- Normal: 1.1–2.5
+- Reversed A/G ratio (<1.0) = cirrhosis, chronic hepatitis, autoimmune disease (globulins rise as albumin falls)
+
+PT / INR (Prothrombin Time / International Normalized Ratio) — Clotting factor synthesis:
+- Normal PT: 11–13.5 seconds
+- Normal INR: 0.8–1.2
+- Elevated INR indicates impaired liver production of clotting factors (II, V, VII, X, fibrinogen)
+- INR >1.5 in acute setting = acute liver failure
+
+Additional Liver-Related Parameters:
+Ammonia:
+- Normal: 15–45 mcg/dL
+- Elevated in hepatic encephalopathy (liver fails to detoxify ammonia from gut bacteria)
+
+Ferritin:
+- Elevated in liver inflammation (acute phase reactant), hemochromatosis
+- Markedly elevated ferritin (>1000 ng/mL) in non-transfused individuals = hemochromatosis or severe liver inflammation
+
+AFP (Alpha-Fetoprotein):
+- Normal: <10 ng/mL
+- Tumor marker for hepatocellular carcinoma; elevated in active hepatitis and cirrhosis
+
+Platelet Count:
+- Normal: 150,000–400,000 cells/mcL
+- Low platelets (<150,000) in cirrhosis = splenomegaly (portal hypertension trapping platelets)
+
+Prealbumin (Transthyretin):
+- Normal: 18–40 mg/dL
+- Very sensitive early marker of liver synthetic decline; half-life of 2–3 days (better than albumin for acute changes)
+
+BMI: ≥25 = overweight; ≥30 = obese — major NAFLD risk factor
+CRP: Elevated in liver inflammation and infection
+Creatinine/BUN: Monitor for hepatorenal syndrome in advanced cirrhosis
+TSH: Hypothyroidism can cause elevated liver enzymes
+Blood Pressure: Portal hypertension monitoring
+Alcohol intake: >14 units/week (women), >21 units/week (men) = hazardous
+
+Viral Hepatitis Markers:
+- HBsAg: Positive = Hepatitis B infection (acute or chronic)
+- HBsAb: Positive = Immunity (vaccination or recovery)
+- HBcAb (IgM): Recent hepatitis B infection
+- HBeAg: High viral replication, high infectivity
+- Anti-HCV: Exposure to Hepatitis C; confirm with HCV RNA PCR
+- HCV RNA (PCR): Confirms active Hepatitis C infection; used for treatment monitoring
+- HAV IgM: Acute Hepatitis A infection
+
+=======================================================
+SECTION 3: SYMPTOMS & CLINICAL PRESENTATION
+=======================================================
+
+Early/Mild Liver Disease (Compensated):
+- Fatigue — most common, often underestimated
+- Right upper quadrant discomfort or fullness
+- Mild nausea, reduced appetite
+- Often asymptomatic — many cases found incidentally on routine blood tests
+
+Advanced Liver Disease (Decompensated):
+
+Jaundice:
+- Yellow discoloration of skin, eyes (scleral icterus), and mucous membranes
+- Appears when bilirubin >2.5 mg/dL
+- Dark (tea-colored) urine: Bilirubin excreted in urine
+- Pale (clay-colored) stools: Bile not reaching intestine
+
+Ascites (Fluid accumulation in abdomen):
+- Caused by portal hypertension + low albumin → fluid leaks into abdomen
+- Abdominal distension, shifting dullness on percussion, fluid wave
+- Increased risk of spontaneous bacterial peritonitis (SBP) — life-threatening
+
+Hepatic Encephalopathy (Brain dysfunction from ammonia):
+- Confusion, disorientation, personality changes
+- Asterixis (flapping tremor of hands)
+- Drowsiness → stupor → coma
+- Triggered by: GI bleeding, infections, dehydration, constipation
+
+Varices (Dilated veins from portal hypertension):
+- Esophageal varices: Risk of massive hemorrhage — medical emergency
+- Spider angiomas: Small dilated vessels on chest/face (from estrogen elevation)
+- Caput medusae: Dilated veins visible around navel
+
+Coagulopathy:
+- Easy bruising, prolonged bleeding
+- Elevated INR from reduced clotting factor synthesis
+
+Hepatorenal Syndrome:
+- Progressive kidney failure secondary to advanced cirrhosis
+- Poor prognosis without liver transplant
+
+Portal Hypertension:
+- Splenomegaly (enlarged spleen) → thrombocytopenia (low platelets)
+- Hemorrhoids
+
+Other Signs:
+- Palmar erythema (red palms)
+- Leukonychia (white nails) in cirrhosis
+- Gynecomastia in men (elevated estrogen)
+- Hair loss, muscle wasting in advanced cirrhosis
+
+=======================================================
+SECTION 4: CAUSES & RISK FACTORS
+=======================================================
+
+Major Causes by Category:
+
+Metabolic/Lifestyle Causes:
+- NAFLD/NASH: Obesity (BMI ≥30), Type 2 diabetes, dyslipidemia, metabolic syndrome — most common liver disease in Western countries and rapidly increasing in South Asia
+- Alcoholic Liver Disease: WHO defines hazardous alcohol use as >14 units/week (women), >21 units/week (men). Risk of cirrhosis increases with >60 g ethanol/day for >10 years
+
+Viral Causes:
+- Hepatitis B (HBV): 296 million people chronically infected worldwide (WHO 2019). Transmitted through blood, sexual contact, mother-to-child. Major cause of cirrhosis and liver cancer in Asia and Africa.
+- Hepatitis C (HCV): 58 million chronically infected (WHO 2019). Transmitted primarily through blood. Leading cause of cirrhosis in Europe and Americas.
+- Hepatitis A (HAV): Fecal-oral route; typically acute, self-limiting. Vaccine-preventable.
+- Hepatitis E (HEV): Waterborne; can be severe in pregnancy.
+
+Autoimmune Causes:
+- Autoimmune Hepatitis: Immune attack on hepatocytes; predominantly young women
+- Primary Biliary Cholangitis (PBC): Autoimmune destruction of small bile ducts
+- Primary Sclerosing Cholangitis (PSC): Progressive biliary stricturing; often with inflammatory bowel disease
+
+Toxic/Drug Causes:
+- Acetaminophen (Paracetamol) overdose: Leading cause of acute liver failure in Western countries
+- Herbal and dietary supplements: Underrecognized but significant cause
+- Antibiotics: Amoxicillin-clavulanate, isoniazid (TB treatment)
+- Statins: Rare; usually mild and reversible
+
+Genetic/Inherited Causes:
+- Wilson's Disease: Copper accumulation in liver, brain, eyes (Kayser-Fleischer rings)
+- Hemochromatosis: Iron overload → cirrhosis, diabetes, cardiomyopathy
+- Alpha-1 Antitrypsin Deficiency: Misfolded protein accumulates in liver
+
+Biliary Obstruction:
+- Gallstones (choledocholithiasis): Obstruct common bile duct
+- Pancreatic cancer, cholangiocarcinoma: Compress bile ducts
+
+WHO Risk Groups:
+- People who inject drugs: High HCV risk
+- Healthcare workers: HBV risk (vaccination essential)
+- Individuals in hepatitis-endemic areas without vaccination
+- Alcohol-dependent individuals
+- People with metabolic syndrome/obesity
+
+=======================================================
+SECTION 5: ML FEATURE INSIGHTS & DIAGNOSTIC PATTERNS
+=======================================================
+
+Key Predictive Features:
+
+1. ALT/AST Elevation:
+- Primary indicators of liver cell damage. ALT more liver-specific than AST.
+- ALT:AST ratio distinguishes alcoholic (>2:1) from viral/metabolic liver disease (<1:1)
+
+2. Bilirubin:
+- Elevated total bilirubin indicates impaired hepatic excretion or hemolysis
+- Direct (conjugated) bilirubin elevation = hepatocellular or cholestatic disease
+- Key marker for disease severity (part of MELD score)
+
+3. Albumin:
+- Reflects liver's synthetic capacity over time
+- Falling albumin = progressive liver failure
+- Low albumin + high INR = cirrhosis decompensation
+
+4. ALP/GGT Pattern:
+- Both elevated: Cholestatic (bile flow obstruction)
+- ALP very high, AST/ALT mildly elevated: Infiltrative disease (cancer, granuloma)
+- GGT elevated alone: Alcohol, enzyme inducers
+
+5. A/G Ratio:
+- Reversed ratio = chronic liver disease with elevated globulins
+
+6. INR:
+- Best acute marker of synthetic liver function; elevated = severe acute or chronic disease
+
+7. Platelet Count:
+- Thrombocytopenia (low platelets) = portal hypertension/hypersplenism from cirrhosis
+
+8. BMI + Metabolic Parameters:
+- High BMI + elevated ALT + metabolic syndrome markers = NAFLD
+
+9. AST:ALT Ratio Patterns:
+- <1: Viral hepatitis, NAFLD
+- 1–2: Can be either
+- >2: Alcoholic liver disease
+- >3: Strongly suggests alcoholic hepatitis or Wilson's disease
+
+MELD Score (Model for End-Stage Liver Disease):
+- Formula: 3.78(ln serum bilirubin) + 11.2(ln INR) + 9.57(ln serum creatinine) + 6.43
+- Score 6–9: Low risk, 10–19: Moderate, 20–29: High, ≥30: Very high (3-month mortality >50%)
+- Used globally for liver transplant allocation
+
+NAFLD Fibrosis Score:
+- Uses age, BMI, diabetes, ALT, AST, albumin, platelet count
+- Predicts hepatic fibrosis without biopsy
+
+FIB-4 Index (Fibrosis Index):
+- Formula: (Age × AST) / (Platelets × √ALT)
+- <1.30 = low fibrosis risk; >2.67 = high fibrosis risk (suggests advanced fibrosis or cirrhosis)
+
+=======================================================
+SECTION 6: TREATMENT & MANAGEMENT (WHO GUIDELINES)
+=======================================================
+
+Hepatitis B (HBV):
+- WHO targets elimination of viral hepatitis as a public health threat by 2030
+- WHO-recommended first-line treatment: Tenofovir (TDF) or Entecavir (ETV) — both on WHO Essential Medicines List
+- Treatment suppresses viral replication; rarely curative but prevents cirrhosis and liver cancer
+- HBV vaccination: 3-dose series — WHO recommends universal infant immunization. >97% effective.
+- Prevention of mother-to-child transmission: HBV vaccine within 24 hours of birth + HBIG
+
+Hepatitis C (HCV):
+- Direct-Acting Antivirals (DAAs) achieve cure (SVR) in >95% of patients within 8–12 weeks
+- WHO-recommended regimens: Sofosbuvir-based combinations (sofosbuvir/velpatasvir, sofosbuvir/daclatasvir)
+- Pan-genotypic regimens eliminate need for genotype testing
+- WHO global elimination target: 90% reduction in new infections, 65% reduction in mortality by 2030
+
+Hepatitis A:
+- Self-limiting in most cases; supportive care (hydration, rest, avoid hepatotoxic drugs)
+- HAV vaccination: 2 doses; WHO recommends in children in endemic settings and high-risk adults
+
+NAFLD/NASH:
+- No approved pharmacotherapy as of 2024; lifestyle is cornerstone
+- Weight loss: 7–10% body weight reduces hepatic steatosis; 10%+ reduces inflammation and fibrosis
+- Exercise: 150–200 minutes/week aerobic + resistance training
+- Avoid alcohol completely
+- Control diabetes, dyslipidemia, hypertension (comorbidities drive NAFLD progression)
+- Vitamin E (800 IU/day): May reduce NASH inflammation in non-diabetic patients (AGA guidelines)
+
+Alcoholic Liver Disease:
+- Alcohol abstinence: Only definitive treatment. WHO Brief Intervention (AUDIT-C screening) recommended in primary care.
+- Severe alcoholic hepatitis: Corticosteroids (prednisolone) if Maddrey's Discriminant Function ≥32
+- Nutrition: High-calorie, high-protein diet; address zinc and B-vitamin deficiencies (especially thiamine)
+
+Cirrhosis Management:
+- Manage complications: Diuretics (spironolactone + furosemide) for ascites
+- Beta-blockers (propranolol/carvedilol) for esophageal variceal bleeding prophylaxis
+- Lactulose + rifaximin for hepatic encephalopathy
+- Regular HCC surveillance: Liver ultrasound ± AFP every 6 months
+- Liver transplantation: Definitive treatment for end-stage liver disease; guided by MELD score
+
+Drug-Induced Liver Injury:
+- Withdraw offending drug immediately
+- N-acetylcysteine (NAC) for acetaminophen overdose within 24 hours
+- Supportive care; rarely requires transplant
+
+=======================================================
+SECTION 7: LIFESTYLE, DIET & PREVENTION (WHO RECOMMENDATIONS)
+=======================================================
+
+Diet for Liver Health:
+- Mediterranean diet: Evidence of reducing NAFLD progression and improving liver enzymes
+- Caloric restriction for overweight/obese patients: 500–1000 kcal/day deficit
+- High fiber intake (25–35 g/day): Reduces hepatic fat
+- Coffee: 2–4 cups/day associated with reduced cirrhosis and liver cancer risk (observational evidence)
+- Limit fructose: High-fructose corn syrup drives hepatic lipogenesis
+
+Foods to Include:
+- Fatty fish (salmon, mackerel): Omega-3 reduces hepatic fat in NAFLD
+- Leafy vegetables: Antioxidants reduce oxidative stress
+- Whole grains: Low GI, reduce metabolic burden
+- Olive oil: Monounsaturated fat improves lipid profile
+- Nuts: Associated with lower liver disease risk in multiple studies
+- Garlic: Modest antioxidant and anti-inflammatory effects
+
+Foods to Avoid or Limit:
+- Alcohol: No safe level for liver disease patients
+- Sugary beverages and fructose-rich foods (promotes hepatic fat)
+- Processed and fried foods (trans fats increase liver inflammation)
+- Red meat in excess (increases NASH progression risk)
+- High-sodium foods (worsen ascites in cirrhotic patients)
+- Herbal supplements: Kava, comfrey, pennyroyal, green tea extract can be hepatotoxic
+
+WHO Alcohol Recommendations:
+- For general population: ≤14 units/week (women), ≤21 units/week (men)
+- For liver disease patients: Complete abstinence required
+- WHO identifies alcohol as a Group 1 carcinogen for liver cancer
+
+Physical Activity:
+- 150–300 minutes/week moderate aerobic activity (brisk walking, swimming, cycling)
+- Resistance training 2–3x/week reduces hepatic fat independently of weight loss
+- Even 20 minutes of daily walking shown to improve liver enzyme levels in NAFLD patients
+
+WHO Prevention Priorities:
+1. Universal HBV vaccination programs (achieving >97% coverage)
+2. Harm reduction for people who inject drugs (needle programs reduce HCV transmission)
+3. Blood supply safety (HBV/HCV screening of all donated blood)
+4. Alcohol taxation and availability restrictions
+5. Obesity prevention through population-level nutrition and physical activity policies
+
+=======================================================
+SECTION 8: MONITORING & FOLLOW-UP
+=======================================================
+
+Initial Evaluation:
+- Liver function tests (ALT, AST, ALP, GGT, bilirubin, albumin, total protein, INR)
+- Full blood count (anemia, thrombocytopenia)
+- Viral hepatitis serology (HBsAg, anti-HCV, HCV RNA if anti-HCV positive)
+- Metabolic panel (glucose, lipids, BMI, waist circumference)
+- Ultrasound abdomen (liver size, echogenicity, ascites, portal hypertension)
+- FIB-4 or NAFLD fibrosis score (non-invasive fibrosis assessment)
+- Liver biopsy: If non-invasive tests inconclusive
+
+Monitoring for Cirrhosis:
+- Every 6 months: Liver ultrasound + AFP (HCC surveillance)
+- Annually: Upper endoscopy (esophageal varices screening)
+- Every 3–6 months: LFTs, CBC, INR, renal function, MELD score
+
+Follow-Up for Hepatitis B on Treatment:
+- Every 3–6 months: HBV DNA, ALT
+- Annually: HBsAg, HBeAg if initially positive
+
+Follow-Up for Hepatitis C:
+- SVR tested 12 weeks after treatment completion
+- Annual liver ultrasound post-SVR if cirrhosis was present
+
+=======================================================
+SECTION 9: Q&A FOR CHATBOT (EXTENDED)
+=======================================================
+
 Q: What does high ALT mean?
-A: It indicates liver cell damage.
+A: ALT (alanine aminotransferase) is an enzyme found primarily in liver cells. When liver cells are damaged or inflamed, ALT leaks into the bloodstream, raising blood levels. Mild elevation (1–3x upper normal) can indicate fatty liver, medication effect, or mild viral hepatitis. High elevation (>10x) suggests acute viral hepatitis, toxic liver injury, or ischemic hepatitis. ALT is more liver-specific than AST.
 
 Q: Is high bilirubin serious?
-A: It may cause jaundice and indicates liver dysfunction.
+A: It depends on the level and cause. Mild bilirubin elevation (1.2–2.5 mg/dL) with no other abnormalities may be Gilbert's syndrome — a benign, inherited condition. Above 2.5 mg/dL, jaundice appears. High bilirubin signals impaired liver function or bile flow obstruction and is part of the MELD scoring system for liver disease severity. Rapidly rising bilirubin in combination with elevated INR indicates acute liver failure — a medical emergency.
 
-Q: How to improve liver health?
-A: Avoid alcohol, eat healthy, and exercise regularly.
+Q: How do I improve my liver health?
+A: The most evidence-based steps are: lose weight if overweight (even 5–10% loss reduces liver fat significantly), stop alcohol completely if you have liver disease, exercise regularly (150+ minutes/week), follow a Mediterranean diet, avoid unnecessary medications and herbal supplements (many are hepatotoxic), and control diabetes, blood pressure, and cholesterol since metabolic disease drives NAFLD progression.
+
+Q: What is fatty liver disease?
+A: NAFLD (Non-Alcoholic Fatty Liver Disease) is excess fat accumulation in the liver not caused by alcohol. It ranges from simple steatosis (fat, no inflammation — usually benign) to NASH (fat + inflammation + cell damage) to cirrhosis. It is closely linked to obesity, diabetes, and metabolic syndrome. WHO estimates 25% of adults globally have NAFLD. Weight loss of 7–10% reverses early stages; advanced fibrosis requires more aggressive management.
+
+Q: What is the difference between hepatitis B and C?
+A: Both are viral infections causing liver inflammation, but differ in transmission and course. Hepatitis B is transmitted through blood, sexual contact, and mother-to-child; there is an effective vaccine. Hepatitis C is spread mainly through blood (needles, transfusions pre-screening era); there is no vaccine but highly effective cures (DAAs achieve >95% cure). Both cause chronic infection, cirrhosis, and liver cancer if untreated.
+
+Q: What does low albumin mean?
+A: Albumin is produced by the liver and maintains fluid balance in the body. Low albumin (<3.5 g/dL) indicates reduced liver synthetic function — a hallmark of chronic liver disease or cirrhosis. It also causes fluid to leak from blood vessels into tissues, contributing to ascites (abdominal fluid) and leg swelling. Low albumin can also occur with malnutrition or kidney disease (protein loss).
+
+Q: What is cirrhosis?
+A: Cirrhosis is irreversible scarring (fibrosis) of the liver from long-term damage — alcohol, NAFLD, or viral hepatitis. The normal liver tissue is replaced by scar tissue, impairing all liver functions. Complications include jaundice, ascites, esophageal varices (dilated veins that can bleed massively), hepatic encephalopathy (brain dysfunction), and liver cancer. The only cure for end-stage cirrhosis is liver transplantation.
+
+Q: Can liver disease be reversed?
+A: Early liver disease — fatty liver (steatosis) and mild inflammation — can be fully reversed with lifestyle changes. Hepatitis B and C can be suppressed or cured, preventing further damage. However, established cirrhosis (advanced scarring) is not reversible; the goal becomes slowing progression and managing complications. Liver transplantation replaces the damaged liver entirely and can be curative for end-stage disease.
+
+Q: How does alcohol damage the liver?
+A: Alcohol is metabolized in the liver, producing acetaldehyde — a toxic compound that causes direct cell damage, inflammation, and oxidative stress. Chronic alcohol use leads to fatty liver → alcoholic hepatitis → cirrhosis in susceptible individuals. The daily quantity, duration of drinking, and individual genetics determine risk. WHO identifies complete abstinence as the only treatment for alcoholic liver disease.
+
+Q: What does the AST/ALT ratio tell my doctor?
+A: The ratio helps differentiate types of liver disease. A ratio less than 1 (ALT higher than AST) suggests viral hepatitis or fatty liver disease. A ratio greater than 2 strongly suggests alcoholic liver disease (alcohol specifically depletes B6 needed for ALT synthesis). A ratio above 3 points to alcoholic hepatitis or rare conditions like Wilson's disease. In isolation, neither enzyme tells the full picture — the ratio adds important diagnostic context.

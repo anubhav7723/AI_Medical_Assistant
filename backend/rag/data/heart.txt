@@ -1,45 +1,326 @@
-HEART DISEASE (CARDIOVASCULAR RISK)
+HEART DISEASE (CARDIOVASCULAR RISK) - COMPREHENSIVE MEDICAL KNOWLEDGE BASE
+(With WHO Guidelines Reference)
+Last Updated: 2024
 
-Definition:
-Heart disease refers to conditions affecting blood vessels and heart function, often due to plaque buildup.
+=======================================================
+SECTION 1: DEFINITION & OVERVIEW
+=======================================================
 
-Normal Ranges:
-Total Cholesterol: <200 mg/dL
-LDL (Bad Cholesterol): <100 mg/dL
-HDL (Good Cholesterol): >40 mg/dL (men), >50 mg/dL (women)
-Triglycerides: <150 mg/dL
+Cardiovascular disease (CVD) is an umbrella term for a group of disorders of the heart and blood vessels. It encompasses coronary artery disease, cerebrovascular disease, peripheral arterial disease, rheumatic heart disease, congenital heart disease, deep vein thrombosis, and pulmonary embolism.
+
+WHO Definition:
+Cardiovascular diseases are a group of disorders of the heart and blood vessels that include coronary heart disease (heart attacks), cerebrovascular disease (stroke), peripheral arterial disease, rheumatic heart disease, congenital heart disease, deep vein thrombosis and pulmonary embolism.
+
+WHO Global Burden:
+- CVD is the number one cause of death globally: 17.9 million deaths per year (2019 WHO data)
+- Represents 32% of all global deaths
+- Over 75% of CVD deaths occur in low- and middle-income countries
+- 85% of CVD deaths are due to heart attack and stroke
+- In India specifically: CVD accounts for 28% of total deaths (WHO South-East Asia Region)
+
+Types of Cardiovascular Disease:
+1. Coronary Artery Disease (CAD): Plaque buildup (atherosclerosis) in coronary arteries → chest pain (angina), heart attack (myocardial infarction)
+2. Heart Failure: Heart unable to pump sufficient blood to meet body's needs
+3. Arrhythmias: Irregular heart rhythms (atrial fibrillation, ventricular tachycardia)
+4. Stroke: Ischemic (blocked artery) or hemorrhagic (burst blood vessel) in the brain
+5. Peripheral Artery Disease (PAD): Plaque in arteries supplying limbs
+6. Hypertensive Heart Disease: Chronic high blood pressure straining the heart
+7. Cardiomyopathy: Disease of the heart muscle
+8. Valvular Heart Disease: Damage to heart valves (aortic stenosis, mitral regurgitation)
+
+=======================================================
+SECTION 2: WHO DIAGNOSTIC PARAMETERS & NORMAL RANGES
+=======================================================
+
+Lipid Panel:
+Total Cholesterol:
+- Desirable: <200 mg/dL (5.2 mmol/L)
+- Borderline High: 200–239 mg/dL
+- High: ≥240 mg/dL (6.2 mmol/L) — significant cardiovascular risk
+
+LDL Cholesterol (Low-Density Lipoprotein — "Bad Cholesterol"):
+- Optimal: <100 mg/dL (2.6 mmol/L)
+- Near Optimal: 100–129 mg/dL
+- Borderline High: 130–159 mg/dL
+- High: 160–189 mg/dL
+- Very High: ≥190 mg/dL
+- Target for high-risk (existing CVD, diabetes): <70 mg/dL
+
+HDL Cholesterol (High-Density Lipoprotein — "Good Cholesterol"):
+- Men: Protective >40 mg/dL (1.0 mmol/L); Optimal >60 mg/dL
+- Women: Protective >50 mg/dL (1.3 mmol/L); Optimal >60 mg/dL
+- Low HDL (<40 mg/dL men, <50 mg/dL women) = major risk factor for CVD
+
+Triglycerides:
+- Normal: <150 mg/dL (1.7 mmol/L)
+- Borderline High: 150–199 mg/dL
+- High: 200–499 mg/dL
+- Very High: ≥500 mg/dL (pancreatitis risk)
+
+Non-HDL Cholesterol (Total − HDL):
+- Optimal: <130 mg/dL
+- Better predictor of CVD risk than LDL alone
+
+LDL/HDL Ratio:
+- Ideal: <2.0
+- Above 5.0 = high risk
 
 Blood Pressure:
-- Normal: 120/80 mmHg
-- High: ≥140/90 mmHg
+- Normal: <120/<80 mmHg
+- Elevated: 120–129/<80 mmHg
+- Stage 1 Hypertension: 130–139/80–89 mmHg
+- Stage 2 Hypertension: ≥140/≥90 mmHg (WHO threshold for treatment)
+- Hypertensive Crisis: >180/>120 mmHg — emergency
 
-Key Parameters:
-Total Cholesterol, LDL, HDL, Triglycerides, Systolic BP, Diastolic BP
+WHO Hypertension Targets:
+- General population: <140/90 mmHg
+- Diabetics/CKD patients: <130/80 mmHg
+- Elderly (>65 years): <150/90 mmHg (careful to avoid hypotension)
 
-Additional Factors:
-Glucose, BMI (via height & weight), Gender, Hypertension
+Additional Cardiac Biomarkers:
+Troponin I/T:
+- Normal: <0.04 ng/mL (varies by assay)
+- Elevated = myocardial injury (heart attack, myocarditis)
 
-Symptoms:
-Chest pain, shortness of breath, fatigue
+CK-MB (Creatine Kinase-MB):
+- Normal: <5 ng/mL
+- Elevated 4–6 hours post heart attack
 
-Causes:
-High cholesterol, hypertension, smoking, diabetes
+BNP / NT-proBNP (Brain Natriuretic Peptide):
+- BNP <100 pg/mL = Heart failure unlikely
+- BNP >400 pg/mL = Heart failure likely
+- Used to diagnose and monitor heart failure severity
 
-ML Feature Insights:
-- High LDL → increased plaque formation
-- Low HDL → reduced protection
-- High BP → strain on heart
-- High glucose → cardiovascular risk
+CRP (C-Reactive Protein) — Inflammatory marker:
+- Normal: <1 mg/L
+- High sensitivity CRP (hs-CRP): <1.0 mg/L (low CVD risk), 1–3 mg/L (moderate), >3.0 mg/L (high risk)
 
-Prevention:
-Exercise, balanced diet, reduce saturated fats, avoid smoking
+Homocysteine:
+- Normal: 5–15 µmol/L
+- Elevated (>15) = increased thrombosis and atherosclerosis risk
 
-User Questions:
+Lipoprotein(a) [Lp(a)]:
+- Low risk: <30 mg/dL
+- High risk: >50 mg/dL (genetic, not modifiable by lifestyle)
+
+ECG Parameters:
+- Normal sinus rhythm: 60–100 bpm
+- PR interval: 0.12–0.20 sec
+- QRS duration: <0.12 sec
+- QTc interval: <0.44 sec (prolonged QTc → arrhythmia risk)
+
+Additional Factors Tracked in ML Model:
+- BMI: ≥30 kg/m² = obese → 3x higher cardiovascular risk
+- Fasting glucose: Hyperglycemia independently damages endothelium
+- Gender: Men at higher risk before 65; post-menopausal women have equalized risk
+- Smoking: Reduces HDL, promotes clot formation, damages vessel walls
+
+=======================================================
+SECTION 3: SYMPTOMS & CLINICAL PRESENTATION
+=======================================================
+
+Coronary Artery Disease (Angina):
+- Chest pain or tightness (typically with exertion, relieved by rest)
+- Radiating pain to left arm, jaw, shoulder, or back
+- Shortness of breath
+- Sweating (diaphoresis)
+- Nausea
+
+Acute Myocardial Infarction (Heart Attack) — EMERGENCY:
+- Sudden, severe crushing chest pain lasting >20 minutes
+- Pain radiating to left arm, jaw, neck, back
+- Profuse sweating, nausea, vomiting
+- Dizziness, feeling of doom
+- Shortness of breath
+- Note: Women, elderly, diabetics may have atypical symptoms (fatigue, indigestion, no chest pain)
+
+Heart Failure:
+- Breathlessness (dyspnea) at rest or on exertion
+- Orthopnea (difficulty breathing while lying flat)
+- Swollen ankles and legs (edema)
+- Fatigue and reduced exercise tolerance
+- Rapid weight gain (fluid retention)
+- Nocturnal cough or wheezing
+
+Stroke (Brain Emergency):
+- WHO promotes FAST acronym: Face drooping, Arm weakness, Speech difficulty, Time to call emergency
+- Sudden severe headache
+- Vision changes (one or both eyes)
+- Difficulty walking, balance loss
+
+Arrhythmias:
+- Palpitations (irregular or rapid heartbeat)
+- Dizziness, fainting (syncope)
+- Fatigue
+
+Silent Ischemia:
+- No symptoms but ischemia occurs on ECG/imaging — common in diabetics and elderly
+
+=======================================================
+SECTION 4: CAUSES & RISK FACTORS
+=======================================================
+
+Atherosclerosis Mechanism:
+Chronic inflammation + LDL oxidation → fatty streaks in vessel wall → plaque formation (lipid core + fibrous cap) → plaque rupture → thrombosis → heart attack or stroke.
+
+Non-Modifiable Risk Factors:
+- Age: Men >45, Women >55 (postmenopausal)
+- Family history: First-degree relative with premature CVD (<55 men, <65 women)
+- Genetics: Familial hypercholesterolemia (LDL >190 mg/dL)
+- Sex: Men higher risk until women catch up post-menopause
+
+Modifiable Risk Factors (WHO Priority Targets):
+- Hypertension: Present in ~50% of CVD cases; each 10 mmHg rise in systolic BP increases stroke risk by ~30%
+- Dyslipidemia: High LDL, low HDL, high triglycerides
+- Smoking: Doubles CVD risk; increases risk of plaque rupture. WHO reports 20% of CVD deaths attributable to tobacco.
+- Diabetes/Prediabetes: Hyperglycemia causes endothelial dysfunction
+- Obesity: Especially visceral/abdominal obesity (waist >94 cm men, >80 cm women)
+- Physical inactivity: Doubles CVD risk (WHO global estimates)
+- Unhealthy diet: High saturated fat, trans fat, sodium, low fruit/vegetable intake
+- Excessive alcohol: >2 drinks/day raises BP and triglycerides
+- Stress and mental health: Chronic stress, depression, anxiety raise cortisol → hypertension
+
+Emerging Risk Factors:
+- Sleep apnea: Nocturnal hypoxia → hypertension → CVD
+- Inflammatory markers: High hs-CRP, high homocysteine
+- Atrial fibrillation: 5x higher stroke risk
+- Air pollution: WHO identifies particulate matter as cardiovascular risk
+
+=======================================================
+SECTION 5: CARDIOVASCULAR RISK SCORING
+=======================================================
+
+Framingham Risk Score:
+- Predicts 10-year risk of coronary heart disease
+- Variables: Age, sex, total cholesterol, HDL, BP, smoking, diabetes
+- Risk categories: Low (<10%), Intermediate (10–20%), High (>20%)
+
+WHO/ISH CVD Risk Charts:
+- WHO published risk charts stratified by region, age, sex, smoking, BP, and cholesterol
+- Used in primary care settings globally to guide treatment decisions
+- Aim: Identify people at ≥30% 10-year CVD risk for intensive intervention
+
+SCORE2 (European Guidelines 2021):
+- Updated risk calculator for 10-year fatal/non-fatal CVD
+- Guides statin and antihypertensive treatment thresholds
+
+=======================================================
+SECTION 6: ML FEATURE INSIGHTS & DIAGNOSTIC PATTERNS
+=======================================================
+
+Top Predictive Features:
+1. LDL Cholesterol: Primary driver of atherosclerotic plaque. Each 38.7 mg/dL (1 mmol/L) decrease in LDL reduces CVD risk by ~20%.
+2. Systolic Blood Pressure: Independent, continuous risk factor. Best single predictor of stroke risk.
+3. HDL Cholesterol: Protective; each 10 mg/dL increase reduces CVD risk by 4% (men) to 8% (women).
+4. Age and Sex: Embedded in all major risk calculators.
+5. Smoking Status: Pack-years of smoking are dose-dependent risk.
+6. HbA1c/Fasting Glucose: Hyperglycemia independently predicts CVD via endothelial damage.
+7. BMI/Waist Circumference: Proxy for visceral fat and metabolic risk.
+8. Triglycerides: Independent CVD risk factor, especially when HDL is also low.
+9. CRP: Inflammatory burden; additive to cholesterol-based risk prediction.
+
+Pattern Recognition:
+- High LDL + Low HDL + High BP + Smoking = Very high CVD risk
+- Normal LDL but High CRP = Inflammatory CVD risk (statin therapy may still benefit — JUPITER trial)
+- High Triglycerides + Low HDL + High Waist = Metabolic Syndrome (3x CVD risk)
+- ST-elevation on ECG + elevated Troponin = STEMI (ST-Elevation Myocardial Infarction) — emergency PCI
+
+Metabolic Syndrome Criteria (3 of 5 required):
+- Waist circumference: >102 cm men, >88 cm women (US); >94 cm men, >80 cm women (Europe/Asia)
+- Triglycerides ≥150 mg/dL
+- HDL <40 mg/dL (men), <50 mg/dL (women)
+- Blood pressure ≥130/85 mmHg
+- Fasting glucose ≥100 mg/dL
+
+=======================================================
+SECTION 7: TREATMENT & MANAGEMENT (WHO GUIDELINES)
+=======================================================
+
+Lifestyle-First Approach (WHO HEARTS Technical Package):
+- The WHO HEARTS package provides evidence-based interventions for CVD management in primary care
+  H: Healthy lifestyle counseling
+  E: Evidence-based treatment protocols
+  A: Access to essential medicines
+  R: Risk-based CVD management
+  T: Team-based care
+  S: Systems for monitoring
+
+Cholesterol Management:
+- Statins: First-line for LDL reduction (atorvastatin, rosuvastatin). Reduce LDL by 30–50%. WHO Essential Medicines.
+- Ezetimibe: Add-on to statin for further LDL reduction (~18–20%)
+- PCSK9 Inhibitors: For very high risk or statin intolerance — powerful LDL lowering (50–60%)
+- Fibrates: For high triglycerides/low HDL
+- Niacin: Raises HDL but limited evidence for outcomes
+
+Blood Pressure Management:
+- First-line: ACE inhibitors or ARBs (especially with diabetes/proteinuria), thiazide diuretics, calcium channel blockers
+- Beta-blockers: After heart attack, for heart failure, arrhythmias
+- Target: <130/80 mmHg for high-risk individuals (AHA/ACC 2017); <140/90 for general population (WHO)
+
+Antiplatelet Therapy:
+- Aspirin: Not recommended for primary prevention in general population (WHO 2021); recommended for secondary prevention (after heart attack/stroke)
+- Clopidogrel: Alternative for aspirin-intolerant patients; combined with aspirin (DAPT) after coronary stent
+
+Acute Heart Attack Treatment:
+- STEMI: Primary PCI (angioplasty) within 90 minutes — gold standard
+- NSTEMI: Risk stratification → early angiography or medical management
+- Thrombolytics (tPA, streptokinase) if PCI not available within 120 minutes
+- Medications: Aspirin, clopidogrel, heparin, nitrates, beta-blockers, oxygen if SpO2 <90%
+
+Heart Failure Management:
+- ACE inhibitors/ARBs, beta-blockers, aldosterone antagonists, diuretics
+- SGLT-2 inhibitors (empagliflozin, dapagliflozin) — reduce hospitalization by 25–35%
+- Device therapy: Implantable defibrillator (ICD), cardiac resynchronization therapy (CRT)
+
+=======================================================
+SECTION 8: PREVENTION (WHO GLOBAL TARGETS)
+=======================================================
+
+WHO Best Buys for CVD Prevention:
+1. Tobacco taxation and smoke-free laws
+2. Salt reduction in processed food (WHO target: <5 g/day)
+3. Trans fat elimination from food supply
+4. Improving access to essential CVD medicines
+5. Counseling and multidrug therapy for high-risk individuals
+
+Primary Prevention Strategies:
+- Diet: DASH or Mediterranean diet. WHO recommends <5g salt/day, <10% calories from saturated fat, eliminate trans fats
+- Exercise: 150–300 minutes/week moderate aerobic activity; 2x/week resistance training
+- Smoking cessation: Single most impactful modifiable risk factor
+- Weight management: BMI target 18.5–24.9 kg/m²
+- Alcohol: Limit to <14 units/week (men), <8 units/week (women)
+- Stress management: Mindfulness, sleep 7–9 hours/night
+
+=======================================================
+SECTION 9: Q&A FOR CHATBOT (EXTENDED)
+=======================================================
+
 Q: Is high cholesterol dangerous?
-A: Yes, it increases risk of heart disease and stroke.
+A: Yes. High LDL cholesterol is a primary driver of atherosclerosis — the buildup of fatty plaques inside artery walls. Plaques can rupture and cause blood clots, leading to heart attacks or strokes. WHO identifies dyslipidemia as one of the top five modifiable cardiovascular risk factors. LDL above 160 mg/dL significantly raises your risk; above 190 mg/dL indicates possible familial hypercholesterolemia.
 
-Q: What is good HDL level?
-A: Above 40–50 mg/dL is considered protective.
+Q: What is a good HDL level?
+A: HDL (high-density lipoprotein) is protective — it transports cholesterol away from arteries to the liver. Above 40 mg/dL (men) and 50 mg/dL (women) are the minimum protective thresholds; above 60 mg/dL is optimal and considered cardioprotective. Low HDL combined with high triglycerides is a hallmark of metabolic syndrome.
 
-Q: How to reduce heart risk?
-A: Exercise, healthy diet, control BP and cholesterol.
+Q: How do I reduce my heart disease risk?
+A: The most impactful steps based on WHO evidence: quit smoking, maintain blood pressure below 130/80 mmHg, bring LDL below 100 mg/dL (or 70 if you already have heart disease), exercise 150 minutes per week, eat a Mediterranean-style diet low in saturated fats and sodium, and maintain a healthy BMI. If you have diabetes, strict glucose control is also essential.
+
+Q: What is metabolic syndrome?
+A: Metabolic syndrome is a cluster of five conditions — abdominal obesity, high triglycerides, low HDL, high blood pressure, and elevated fasting glucose. Having any three of these significantly triples your risk of cardiovascular disease. It affects roughly 25% of adults globally and is strongly linked to insulin resistance and Type 2 diabetes.
+
+Q: What are warning signs of a heart attack?
+A: Classic signs include sudden severe chest pain (crushing, pressure-like) radiating to the left arm, jaw, or back; sweating; nausea; and shortness of breath. Women and diabetics often have atypical symptoms — unusual fatigue, indigestion, or upper back pain. Any suspicion of a heart attack requires calling emergency services immediately; every minute of delay increases heart muscle damage.
+
+Q: What do my blood pressure numbers mean?
+A: The top number (systolic) is pressure when the heart beats; the bottom (diastolic) is between beats. WHO defines normal as <120/<80 mmHg. Hypertension is ≥140/≥90 mmHg. Uncontrolled hypertension causes arterial damage, heart enlargement, and dramatically increases stroke and heart attack risk — every 10 mmHg rise in systolic BP increases stroke risk by ~30%.
+
+Q: Is heart disease hereditary?
+A: Genetics significantly contribute. A first-degree relative with premature heart disease (father/brother before 55, mother/sister before 65) roughly doubles your risk. Familial hypercholesterolemia — inherited high LDL — affects 1 in 250 people and causes heart attacks in men as young as 30–40. However, lifestyle modifications remain powerful even in genetically predisposed individuals.
+
+Q: Can heart disease be reversed?
+A: Atherosclerosis can be slowed and in some cases partially regressed. Aggressive LDL lowering (statins + healthy diet) reduces plaque volume. Lifestyle interventions — the Ornish program — have demonstrated coronary artery plaque regression. However, established heart disease cannot be fully reversed; the focus shifts to preventing progression and complications.
+
+Q: What is the difference between angina and a heart attack?
+A: Angina is chest pain from temporary reduced blood flow — it typically occurs with exertion or stress, lasts 2–5 minutes, and is relieved by rest or nitrates. A heart attack (myocardial infarction) occurs when a coronary artery is completely blocked, causing permanent heart muscle damage. Heart attack pain is more severe, lasts >20 minutes, and occurs at rest. Both require medical evaluation.
+
+Q: How does smoking affect my heart?
+A: Smoking damages the endothelium (inner lining) of blood vessels, promotes LDL oxidation and plaque formation, raises blood pressure, lowers protective HDL, and makes platelets more sticky — raising clot risk. WHO estimates smoking accounts for 20% of all CVD deaths globally. Quitting reduces heart attack risk by half within one year and approaches non-smoker levels within 15 years.

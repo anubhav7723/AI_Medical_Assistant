@@ -11,6 +11,14 @@ from pydantic import BaseModel
 from ocr.extractor import extract_text_from_file, parse_medical_parameters
 from dotenv import load_dotenv
 load_dotenv()
+try:
+    from rag.retriever import retrieve_for_diseases, format_context
+    RAG_READY = True
+except Exception as e:
+    print(f"⚠️  RAG not loaded: {e}")
+    RAG_READY = False
+    def retrieve_for_diseases(q, d, top_k=5): return []
+    def format_context(chunks): return "No knowledge base available."
 
 # ── App setup ─────────────────────────────────────────────────────
 app = FastAPI(
@@ -151,9 +159,9 @@ async def ocr_debug(file: UploadFile = File(...)):
 
 def debias_probability(prob: float) -> float:
     if prob < 15:
-        debiased = 25 + (prob / 15) * 5
+        debiased = 20 + (prob / 15) * 5
     elif prob > 70:
-        debiased = 60 + ((prob - 70) / 30) * 10
+        debiased = 65 + ((prob - 70) / 30) * 10
     else:
         debiased = prob
     return round(debiased, 1)
@@ -296,36 +304,138 @@ def summarize_endpoint(body: SummarizeRequest):
 @app.post("/chat")
 def chat_endpoint(body: ChatRequest):
     """
-    Mediee chatbot endpoint.
-    Receives full conversation history, returns next assistant reply.
-    Wire up your Groq / Llama / Mixtral API here.
+    Mediee RAG chatbot.
+    Pipeline:
+      1. Extract last user message
+      2. Pull ML predictions from conversation context (if sent)
+      3. Retrieve relevant chunks from FAISS
+      4. Build grounded prompt → Groq LLM
+      5. Return reply
     """
-    # ── TODO: replace this stub with your LLM call ──────────────
-    # Example with Groq:
-    #
-    # from groq import Groq
-    # client = Groq(api_key=os.environ["GROQ_API_KEY"])
-    #
-    # messages = [
-    #     {
-    #         "role": "system",
-    #         "content": (
-    #             "You are Mediee, a friendly and knowledgeable medical assistant. "
-    #             "Help users understand their medical reports and health concerns. "
-    #             "Always recommend consulting a doctor for diagnosis."
-    #         )
-    #     },
-    #     *[{"role": m.role, "content": m.content} for m in body.messages]
-    # ]
-    #
-    # response = client.chat.completions.create(
-    #     model="llama3-8b-8192",
-    #     messages=messages,
-    # )
-    # return {"reply": response.choices[0].message.content}
-    # ──────────────────────────────────────────────────────────────
-
-    raise HTTPException(
-        status_code=501,
-        detail="Chat not yet implemented. Wire up your LLM in main.py /chat route."
-    )
+    from groq import Groq
+ 
+    client = Groq(api_key=os.environ["GROQ_API_KEY"])
+ 
+    # ── 1. Get the latest user message ───────────────────────────
+    user_messages = [m for m in body.messages if m.role == "user"]
+    if not user_messages:
+        raise HTTPException(status_code=400, detail="No user message found.")
+ 
+    latest_query = user_messages[-1].content
+ 
+    # ── 2. Extract ML context injected by frontend ────────────────
+    # Convention: the FIRST message with role="system" carries
+    # a JSON blob of ML predictions + report summary.
+    # Format expected (frontend sends this once at conversation start):
+    #   {"ml_predictions": [...], "report_summary": "...", "parameters": {...}}
+    ml_context_str = ""
+    active_diseases = []
+ 
+    for m in body.messages:
+        if m.role == "system" and m.content.strip().startswith("{"):
+            try:
+                ctx = json.loads(m.content)
+ 
+                # Build a readable ML predictions block
+                preds = ctx.get("ml_predictions", [])
+                if preds:
+                    lines = []
+                    for p in preds:
+                        if p.get("score") is not None:
+                            lines.append(
+                                f"  - {p['disease']}: {p['score']}% risk "
+                                f"(model: {p.get('model', 'ML')})"
+                            )
+                            active_diseases.append(p["disease"])
+                    if lines:
+                        ml_context_str += "ML Risk Predictions:\n" + "\n".join(lines)
+ 
+                # Add report summary if present
+                summary = ctx.get("report_summary", "")
+                if summary:
+                    ml_context_str += f"\n\nReport Summary:\n{summary}"
+ 
+                # Add key parameters if present
+                params = ctx.get("parameters", {})
+                if params:
+                    if isinstance(params, dict):
+                        param_lines = [f"  {k}: {v}" for k, v in list(params.items())[:15]]
+                    elif isinstance(params, list):
+                        param_lines = [f"  {item.get('param','')}: {item.get('value','')}" for item in params[:15]]
+                    else:
+                        param_lines = []
+                    ml_context_str += "\n\nKey Lab Parameters:\n" + "\n".join(param_lines)
+ 
+            except (json.JSONDecodeError, KeyError):
+                pass
+            break  # only read the first system message
+ 
+    # ── 3. RAG retrieval ─────────────────────────────────────────
+    rag_chunks  = retrieve_for_diseases(latest_query, active_diseases, top_k=5)
+    print(f"🔍 RAG chunks retrieved: {len(rag_chunks)}")  # ← ADD THIS
+    for c in rag_chunks:
+        print(f"   [{c['source']}] score={c['score']} | {c['text'][:80]}")
+    rag_context = format_context(rag_chunks)
+ 
+    # ── 4. Build system prompt ───────────────────────────────────
+    system_prompt = f"""You are Mediee, an intelligent medical assistant built to help users understand their medical reports.
+ 
+You have access to three knowledge sources — use ALL of them when relevant:
+ 
+────────────────────────────────────────
+PATIENT DATA (from their uploaded report)
+────────────────────────────────────────
+{ml_context_str if ml_context_str else "No report data available for this session."}
+ 
+────────────────────────────────────────
+MEDICAL KNOWLEDGE BASE (retrieved for this question)
+────────────────────────────────────────
+{rag_context}
+ 
+────────────────────────────────────────
+INSTRUCTIONS
+────────────────────────────────────────
+- Take reference patient data (ML scores, lab values) when the user explicitly asks about their report, health, or specific parameters And if you can't access data then answer from your knowledge.
+- If the user asks a general or casual question (e.g. "how are you", "what is diabetes"), respond naturally without mentioning their personal data.
+- Keep answers to 2-3 sentences maximum. Be direct and to the point.
+- Only add "Always consult your doctor before making any health decisions." when giving medical advice, not on every message.
+- Never diagnose. Never prescribe. Explain and guide only.
+"""
+ 
+    # ── 5. Build conversation history for Groq ───────────────────
+    # Filter out the system context message (already embedded in system_prompt)
+    history = [
+        {"role": m.role, "content": m.content}
+        for m in body.messages
+        if not (m.role == "system" and m.content.strip().startswith("{"))
+    ]
+ 
+    groq_messages = [
+        {"role": "system", "content": system_prompt},
+        *history,
+    ]
+ 
+    # ── 6. Call Groq ─────────────────────────────────────────────
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=groq_messages,
+            temperature=0.4,      # lower = more factual, less creative
+            max_tokens=200,
+        )
+        reply = response.choices[0].message.content
+ 
+    except Exception as e:
+        raise HTTPException(
+            status_code=502,
+            detail=f"LLM call failed: {str(e)}"
+        )
+ 
+    # ── 7. Return reply + which chunks were used (for debugging) ──
+    return {
+        "reply": reply,
+        "rag_sources": [
+            {"source": c["source"], "score": c["score"]}
+            for c in rag_chunks
+        ],
+    }

@@ -1,48 +1,264 @@
-DIABETES
+DIABETES - COMPREHENSIVE MEDICAL KNOWLEDGE BASE
+(With WHO Guidelines Reference)
+Last Updated: 2024
 
-Definition:
-Diabetes is a chronic condition characterized by high blood glucose levels.
+=======================================================
+SECTION 1: DEFINITION & OVERVIEW
+=======================================================
 
-Normal Ranges:
-Fasting Glucose:
-- Normal: 70–100 mg/dL
-- Prediabetes: 100–125 mg/dL
-- Diabetes: >126 mg/dL
+Diabetes mellitus is a group of chronic metabolic disorders characterized by hyperglycemia (elevated blood glucose) resulting from defects in insulin secretion, insulin action, or both. Chronically elevated blood glucose leads to damage of the eyes, kidneys, nerves, and cardiovascular system.
 
-HbA1c:
-- Normal: <5.7%
-- Prediabetes: 5.7–6.4%
-- Diabetes: ≥6.5%
+WHO Definition:
+Diabetes mellitus is a chronic, progressive, non-communicable disease characterized by elevated levels of blood glucose, which leads over time to serious damage to the heart, blood vessels, eyes, kidneys, and nerves.
 
-Key Parameters:
-HbA1c, Fasting Glucose, BMI, Age
+WHO Global Burden:
+- 422 million adults worldwide had diabetes in 2014; number continues rising (WHO Global Report on Diabetes, 2016)
+- Diabetes caused 1.5 million deaths directly in 2019
+- 48% of all diabetes-related deaths occur before age 70
+- Low and middle-income countries bear the highest burden
+- Projected 783 million adults with diabetes by 2045 (IDF Diabetes Atlas, 2023)
 
-Additional Factors:
-Gender, Hypertension, Heart Disease, Smoking History
+Types of Diabetes:
+1. Type 1 Diabetes (T1DM): Autoimmune destruction of pancreatic beta cells → absolute insulin deficiency. Often diagnosed in children/young adults. Requires lifelong insulin.
+2. Type 2 Diabetes (T2DM): Insulin resistance + progressive beta cell failure. Most common (90–95% of cases). Strongly linked to obesity and lifestyle.
+3. Gestational Diabetes Mellitus (GDM): Hyperglycemia first detected during pregnancy. Risk factor for T2DM later.
+4. Prediabetes: Impaired fasting glucose (IFG) or impaired glucose tolerance (IGT). Reversible with lifestyle changes.
+5. MODY (Maturity-Onset Diabetes of the Young): Rare genetic forms.
+6. Secondary Diabetes: Due to pancreatitis, steroids, Cushing's syndrome, etc.
 
-Symptoms:
-Frequent urination, excessive thirst, fatigue, blurred vision
+=======================================================
+SECTION 2: WHO DIAGNOSTIC CRITERIA & NORMAL RANGES
+=======================================================
 
-Causes:
-Insulin resistance, obesity, genetics, sedentary lifestyle
+WHO/IDF Diagnostic Criteria for Diabetes (2023):
 
-ML Feature Insights:
-- High HbA1c → long-term glucose elevation
-- High fasting glucose → immediate diabetes indicator
-- High BMI → obesity-related diabetes risk
+Fasting Plasma Glucose (FPG) — 8 hours no caloric intake:
+- Normal: 70–99 mg/dL (3.9–5.5 mmol/L)
+- Impaired Fasting Glucose (Prediabetes): 100–125 mg/dL (5.6–6.9 mmol/L)
+- Diabetes: ≥126 mg/dL (7.0 mmol/L) on two separate occasions
 
-Complications:
-Heart disease, kidney failure, nerve damage
+2-Hour Plasma Glucose (during 75g OGTT — Oral Glucose Tolerance Test):
+- Normal: <140 mg/dL (7.8 mmol/L)
+- Impaired Glucose Tolerance (Prediabetes): 140–199 mg/dL (7.8–11.0 mmol/L)
+- Diabetes: ≥200 mg/dL (11.1 mmol/L)
 
-Lifestyle & Diet:
-Reduce sugar intake, exercise regularly, maintain healthy weight
+Random Plasma Glucose:
+- Diabetes (with symptoms): ≥200 mg/dL (11.1 mmol/L)
 
-User Questions:
+HbA1c (Glycated Hemoglobin) — WHO adopted as diagnostic criterion in 2011:
+- Normal: <5.7% (<39 mmol/mol)
+- Prediabetes: 5.7–6.4% (39–47 mmol/mol)
+- Diabetes: ≥6.5% (48 mmol/mol)
+
+Note: HbA1c reflects average blood glucose over the preceding 2–3 months (lifespan of RBC). One abnormal result alone is sufficient for diagnosis if symptoms are present; otherwise, two abnormal results required.
+
+Insulin Levels (Fasting):
+- Normal: 2–25 mIU/L
+- Elevated fasting insulin = insulin resistance
+
+C-Peptide:
+- Normal: 0.5–2.0 ng/mL
+- Low in T1DM (poor insulin secretion), Normal or High in T2DM
+
+Additional Key Parameters:
+- BMI (Body Mass Index): ≥25 kg/m² (overweight), ≥30 kg/m² (obese) — major risk factor for T2DM
+- Waist Circumference: >94 cm men, >80 cm women (WHO European cutoffs for metabolic risk)
+- Blood Pressure: Diabetics should maintain <130/80 mmHg (ADA 2023)
+- LDL Cholesterol: Target <100 mg/dL for diabetics, <70 mg/dL if high CVD risk
+
+=======================================================
+SECTION 3: SYMPTOMS & CLINICAL PRESENTATION
+=======================================================
+
+Classic Symptoms (3 Ps + others):
+- Polyuria: Frequent and excessive urination (glucose acts as osmotic diuretic)
+- Polydipsia: Excessive thirst (compensating fluid loss)
+- Polyphagia: Increased hunger despite eating (cells starved of glucose)
+- Unexplained weight loss (T1DM especially)
+- Fatigue and weakness
+- Blurred vision (lens shape changes with glucose)
+- Slow-healing wounds and infections
+- Recurrent infections (UTIs, skin infections, thrush)
+- Tingling, numbness, or pain in hands/feet (early neuropathy)
+- Dark patches of skin at neck/armpits (acanthosis nigricans) — sign of insulin resistance
+
+T1DM Acute Presentation:
+- Diabetic Ketoacidosis (DKA): Fruity-smelling breath, nausea, vomiting, abdominal pain, rapid breathing, confusion — medical emergency
+
+T2DM:
+- Often asymptomatic for years (found incidentally on screening)
+- Gradual onset over months to years
+
+=======================================================
+SECTION 4: CAUSES & RISK FACTORS
+=======================================================
+
+Type 1 Diabetes Causes:
+- Autoimmune destruction of beta cells (T-cell mediated)
+- Genetic predisposition (HLA-DR3, HLA-DR4 alleles)
+- Environmental triggers: viral infections (Coxsackievirus, rubella), early cow's milk exposure
+
+Type 2 Diabetes Causes:
+- Insulin resistance: Peripheral tissues (muscle, liver, fat) fail to respond to insulin
+- Beta cell exhaustion: Progressive decline in insulin secretion over time
+- Obesity: Excess adipose tissue releases inflammatory cytokines (TNF-α, IL-6) impairing insulin signaling
+- Genetic factors: Strong family history increases risk 3–5x
+- Sedentary lifestyle, high-calorie diet
+
+WHO-Identified Risk Factors for T2DM:
+- Overweight/obesity (BMI ≥25)
+- Physical inactivity
+- Unhealthy diet (high sugar, saturated fat, low fiber)
+- Family history of diabetes
+- Age ≥45 years
+- Gestational diabetes history or birth of baby >4 kg
+- Prediabetes (IFG or IGT)
+- Hypertension (≥140/90 mmHg)
+- Dyslipidemia (low HDL, high triglycerides)
+- Ethnicity: South Asian, African, Hispanic, Pacific Islander populations at higher risk
+- Polycystic Ovary Syndrome (PCOS) in women
+
+=======================================================
+SECTION 5: ML FEATURE INSIGHTS & DIAGNOSTIC PATTERNS
+=======================================================
+
+Primary Predictive Features (in order of importance):
+1. HbA1c: Best single predictor. ≥6.5% = diabetes by WHO. Reflects long-term control.
+2. Fasting Glucose: Immediate hyperglycemia marker. ≥126 mg/dL = diabetes threshold.
+3. BMI: Strong predictor for T2DM risk. Each 1 kg/m² increase raises risk ~5–10%.
+4. Age: Risk increases substantially after 40; strongly after 60.
+5. Hypertension: Co-existing condition; shared pathophysiology with T2DM (metabolic syndrome).
+6. Smoking History: Smokers have 30–40% higher T2DM risk (WHO).
+7. Gender: Men develop T2DM at lower BMI; women at higher risk post-GDM.
+8. Family History: First-degree relative doubles risk.
+9. Triglycerides/HDL Ratio: Proxy for insulin resistance (triglycerides high + HDL low = insulin resistant).
+
+Risk Scoring Models:
+- FINDRISC (Finnish Diabetes Risk Score): Age, BMI, waist, physical activity, diet, antihypertensive drugs, blood glucose history, family history → score 0–26. Score ≥15 = high risk.
+- American Diabetes Association Risk Test: Simple 7-question screening.
+
+=======================================================
+SECTION 6: COMPLICATIONS
+=======================================================
+
+Microvascular Complications (small blood vessel damage):
+- Diabetic Retinopathy: Leading cause of blindness in working-age adults. Affects ~35% of diabetics (WHO). Regular fundoscopy screening every 1–2 years.
+- Diabetic Nephropathy: Leading cause of chronic kidney disease (CKD) and dialysis globally. Early sign: microalbuminuria >30 mg/day. Monitor urine ACR annually.
+- Diabetic Neuropathy: Affects up to 50% of diabetics. Peripheral neuropathy (burning, tingling feet), autonomic neuropathy (gastroparesis, bladder dysfunction, sexual dysfunction).
+
+Macrovascular Complications (large blood vessel damage):
+- Cardiovascular Disease: 2–4x higher risk of heart attack and stroke. Leading cause of death in T2DM.
+- Peripheral Artery Disease (PAD): Reduced blood flow to legs → ulcers, gangrene, amputation.
+- Diabetic Foot: 15% of diabetics develop foot ulcers. 85% of lower-limb amputations are preceded by foot ulcers (WHO).
+
+Other Complications:
+- Infections: Impaired immunity → increased risk of tuberculosis, fungal infections (especially oral candidiasis)
+- Depression: 2–3x higher prevalence in people with diabetes
+- Diabetic Ketoacidosis (DKA): T1DM emergency — life-threatening if untreated
+- Hyperosmolar Hyperglycemic State (HHS): T2DM emergency with extreme hyperglycemia >600 mg/dL
+
+=======================================================
+SECTION 7: TREATMENT & MANAGEMENT (WHO GUIDELINES)
+=======================================================
+
+Lifestyle Intervention — First Line for T2DM and Prediabetes:
+- WHO recommends at least 150 minutes/week moderate aerobic activity
+- Weight loss of 5–7% body weight reduces T2DM progression by 58% (Diabetes Prevention Program, supported by WHO)
+- Diet: Mediterranean or DASH-style diet; reduce refined carbohydrates and saturated fat; increase fiber
+
+Pharmacological Treatment:
+- Metformin: First-line oral agent for T2DM (WHO Essential Medicines List). Reduces hepatic glucose output. Target HbA1c <7%.
+- Second-line: SGLT-2 inhibitors (empagliflozin), GLP-1 agonists (liraglutide) — preferred with cardiovascular disease
+- Insulin Therapy: Required for T1DM; used in T2DM when oral agents insufficient. Multiple regimens (basal, bolus, premix)
+- Sulfonylureas: Stimulate insulin secretion; risk of hypoglycemia
+- DPP-4 Inhibitors (gliptins): Safe, modest glucose lowering
+
+Blood Glucose Targets (WHO/IDF):
+- HbA1c: <7.0% general target; <8.0% for elderly or high hypoglycemia risk
+- Fasting glucose: 80–130 mg/dL
+- Post-meal (2-hr): <180 mg/dL
+
+Monitoring Protocol:
+- HbA1c: Every 3 months until controlled, then every 6 months
+- Fasting glucose: Daily self-monitoring if on insulin
+- Annual: Eye exam, foot exam, urine ACR, lipids, BP, BMI
+- Every 3–6 months: Weight, BP, medication review
+
+=======================================================
+SECTION 8: LIFESTYLE, DIET & PREVENTION (WHO RECOMMENDATIONS)
+=======================================================
+
+Dietary Guidance:
+- Reduce total calorie intake if overweight
+- Increase dietary fiber: 25–30 g/day (whole grains, vegetables, legumes)
+- Choose low glycemic index (GI) foods: oats, barley, legumes, most fruits
+- Limit: sugar-sweetened beverages, white rice, white bread, processed foods
+- Reduce saturated fat; replace with unsaturated fats (olive oil, nuts, avocado)
+- Sodium <2 g/day (especially with hypertension)
+
+Foods to Include:
+- Non-starchy vegetables: broccoli, spinach, cauliflower, tomatoes
+- Whole grains: brown rice, quinoa, whole wheat bread
+- Legumes: lentils, chickpeas, kidney beans
+- Lean proteins: chicken, fish, tofu
+- Healthy fats: olive oil, nuts, seeds, fatty fish
+
+Foods to Limit or Avoid:
+- Sugar-sweetened beverages (soda, juice, energy drinks)
+- Refined carbohydrates (white bread, pastries, white rice)
+- Trans fats, fried foods, processed snacks
+- High-fat red meat
+- Alcohol (increases hypoglycemia risk; maximum 1 drink/day for women, 2 for men)
+
+Physical Activity:
+- 150 minutes/week moderate activity (brisk walking, cycling, swimming)
+- Resistance training 2–3 times/week improves insulin sensitivity
+- Reduce prolonged sitting — break up sedentary time every 30 minutes
+
+WHO Global Action Plan for NCDs:
+- Target: Halt rise in obesity and diabetes by 2030
+- Strategies: Sugar taxes, food labeling, school nutrition programs, urban physical activity planning
+
+=======================================================
+SECTION 9: SCREENING RECOMMENDATIONS (WHO)
+=======================================================
+
+WHO Recommends Screening For:
+- Adults ≥45 years: Fasting glucose or HbA1c every 3 years if normal
+- Any age with risk factors (obesity, hypertension, family history, GDM history): Annual screening
+- All pregnant women: Screen for GDM at 24–28 weeks gestation
+- People with prediabetes: Annual follow-up; lifestyle intervention to prevent progression
+
+=======================================================
+SECTION 10: Q&A FOR CHATBOT (EXTENDED)
+=======================================================
+
 Q: What does high HbA1c mean?
-A: It indicates long-term elevated blood sugar levels.
+A: HbA1c reflects your average blood sugar over the past 2–3 months. WHO defines ≥6.5% as diabetes, 5.7–6.4% as prediabetes. High HbA1c means sustained elevated blood glucose is damaging blood vessels and organs over time. Reducing it by even 1% significantly cuts risk of diabetes complications.
 
 Q: Is my glucose level dangerous?
-A: Levels above 126 mg/dL may indicate diabetes.
+A: A fasting glucose ≥126 mg/dL (7.0 mmol/L) indicates diabetes by WHO standards. Between 100–125 mg/dL is prediabetes — a critical window for intervention. A single reading can be confirmed with a repeat test or HbA1c. Random glucose ≥200 mg/dL with symptoms is also diagnostic.
 
-Q: How can I reduce diabetes risk?
-A: Maintain diet control, exercise, and weight management.
+Q: How can I reduce my diabetes risk?
+A: WHO evidence shows that losing 5–7% of body weight and doing 150 minutes of moderate exercise weekly can reduce T2DM progression from prediabetes by 58%. Prioritize fiber-rich whole foods, reduce sugar and refined carbohydrates, quit smoking, and control blood pressure and cholesterol.
+
+Q: What is the difference between Type 1 and Type 2 diabetes?
+A: Type 1 is an autoimmune disease where the immune system destroys insulin-producing cells; it requires insulin injections for survival. Type 2 is caused by insulin resistance and lifestyle factors; it is often manageable with diet, exercise, and oral medications, though may eventually require insulin.
+
+Q: What happens if diabetes is left untreated?
+A: Untreated diabetes progressively damages blood vessels and nerves. Consequences include blindness (diabetic retinopathy), kidney failure (diabetic nephropathy), foot amputations, heart attacks, strokes, and increased infections. WHO reports that diabetes complications are among the leading causes of global disability and death.
+
+Q: How often should I check my blood sugar?
+A: If on insulin: daily fasting and post-meal readings. If on oral medications: 2–4 times weekly. HbA1c every 3–6 months. Your doctor will individualize this based on your medication and control level.
+
+Q: What is gestational diabetes?
+A: GDM is high blood sugar first detected during pregnancy. WHO recommends universal screening at 24–28 weeks. It resolves after delivery but increases the mother's risk of T2DM by 7x and the baby's risk of obesity and diabetes later in life.
+
+Q: Can diabetes be reversed?
+A: Type 2 diabetes can go into remission — defined as HbA1c <6.5% for at least 3 months without medication — through significant weight loss (10–15 kg), very-low-calorie diets, or bariatric surgery. It is not a permanent cure; lifestyle must be sustained. Type 1 cannot be reversed with current treatments.
+
+Q: What does insulin resistance mean?
+A: Insulin resistance means your body's cells don't respond effectively to insulin, so the pancreas produces more to compensate. Over time, the pancreas can't keep up, and blood glucose rises. It's strongly associated with abdominal obesity, high triglycerides, low HDL, and hypertension (metabolic syndrome).
+
+Q: Is diabetes genetic?
+A: Genetics play a role in both types. For T2DM, having a parent or sibling with diabetes roughly doubles your risk. However, lifestyle factors are dominant — and lifestyle changes can prevent or delay T2DM even in genetically predisposed individuals.

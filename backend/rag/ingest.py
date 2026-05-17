@@ -34,7 +34,13 @@ CHUNK_OVERLAP = 80    # overlap between consecutive chunks
 
 # ── Embedding model ───────────────────────────────────────────────
 # all-MiniLM-L6-v2: lightweight (80 MB), 384-dim, great for medical Q&A retrieval
-EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBED_MODEL = None
+
+def get_model():
+    global EMBED_MODEL
+    if EMBED_MODEL is None:
+        EMBED_MODEL = SentenceTransformer("paraphrase-MiniLM-L3-v2")
+    return EMBED_MODEL
 
 
 def load_txt_files(data_dir: Path) -> list[dict]:
@@ -119,8 +125,8 @@ def main():
     print(f"  Total chunks: {len(all_chunks)}")
 
     # 3. Load embedding model and embed
-    print(f"\n[3/4] Loading embedding model: {EMBED_MODEL} …")
-    model      = SentenceTransformer(EMBED_MODEL)
+    print(f"\n[3/4] Loading embedding model …")
+    model      = get_model()
     embeddings = embed_chunks(all_chunks, model)
 
     # 4. Build FAISS index and save artifacts

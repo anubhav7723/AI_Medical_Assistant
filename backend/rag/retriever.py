@@ -31,7 +31,13 @@ FAISS_PATH    = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunks.pkl"
 
 # ── Same model used during ingestion ─────────────────────────────
-EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBED_MODEL = None
+
+def get_model():
+    global EMBED_MODEL
+    if EMBED_MODEL is None:
+        EMBED_MODEL = SentenceTransformer("paraphrase-MiniLM-L3-v2")
+    return EMBED_MODEL
 
 # ── Minimum similarity score to include a chunk ───────────────────
 # Cosine similarity is 0–1; chunks below this threshold are noise.
@@ -57,8 +63,8 @@ def _load_artifacts():
     with open(METADATA_PATH, "rb") as f:
         chunks: list[dict] = pickle.load(f)
 
-    print(f"  🤖 Loading embedding model: {EMBED_MODEL} …")
-    model = SentenceTransformer(EMBED_MODEL)
+    print(f"  🤖 Loading embedding model…")
+    model = get_model()
 
     print(f"  ✅ Retriever ready — {index.ntotal} vectors indexed")
     return index, chunks, model

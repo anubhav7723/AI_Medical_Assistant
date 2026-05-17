@@ -16,3 +16,4 @@ pytesseract
 pdfplumber
 python-docx
 opencv-python-headless
+pdf2image

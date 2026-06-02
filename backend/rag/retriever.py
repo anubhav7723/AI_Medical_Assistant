@@ -1,21 +1,3 @@
-"""
-rag/retriever.py
-─────────────────────────────────────────────────────────────────
-Loads the FAISS index + chunk metadata built by ingest.py.
-Exposes a single function:
-
-    retrieve(query: str, top_k: int = 5) -> list[dict]
-
-Each returned dict:
-    {
-        "text":   "...chunk text...",
-        "source": "anemia" | "diabetes" | "heart" | "liver",
-        "score":  0.87          # cosine similarity (0–1, higher = more relevant)
-    }
-
-The retriever is initialised once at module import time so the
-FAISS index and embedding model stay in memory across all requests.
-"""
 
 import pickle
 from pathlib import Path

@@ -1,14 +1,3 @@
-"""
-rag/ingest.py
-─────────────────────────────────────────────────────────────────
-Reads the 4 disease txt files from rag/data/,
-chunks them into overlapping passages,
-embeds with sentence-transformers,
-and saves a FAISS index + metadata to rag/index/.
-
-Run once (or whenever you update the txt files):
-    python -m rag.ingest
-"""
 
 import os
 import json

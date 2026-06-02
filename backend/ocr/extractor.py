@@ -1,9 +1,3 @@
-"""
-ocr/extractor.py
-────────────────
-Optimized for scanned medical lab report images.
-Uses Tesseract with table-aware preprocessing.
-"""
 
 import io
 import re

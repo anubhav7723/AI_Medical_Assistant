@@ -1,4 +1,3 @@
-
 import pickle
 from pathlib import Path
 
@@ -6,13 +5,13 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 
-# ── Paths (mirror ingest.py) ──────────────────────────────────────
+# Paths
 BASE_DIR      = Path(__file__).parent
 INDEX_DIR     = BASE_DIR / "index"
 FAISS_PATH    = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunks.pkl"
 
-# ── Same model used during ingestion ─────────────────────────────
+# Same Model 
 EMBED_MODEL = None
 
 def get_model():
@@ -21,14 +20,7 @@ def get_model():
         EMBED_MODEL = SentenceTransformer("paraphrase-MiniLM-L3-v2")
     return EMBED_MODEL
 
-# ── Minimum similarity score to include a chunk ───────────────────
-# Cosine similarity is 0–1; chunks below this threshold are noise.
 MIN_SCORE = 0.25
-
-
-# ═════════════════════════════════════════════════════════════════
-# Module-level singleton — loaded once, reused across all requests
-# ═════════════════════════════════════════════════════════════════
 
 def _load_artifacts():
     """Load FAISS index, chunk metadata, and embedding model."""
@@ -61,11 +53,6 @@ except FileNotFoundError as e:
     _faiss_index = _chunks = _embed_model = None
     RETRIEVER_READY = False
 
-
-# ═════════════════════════════════════════════════════════════════
-# Public API
-# ═════════════════════════════════════════════════════════════════
-
 def retrieve(query: str, top_k: int = 5) -> list[dict]:
     """
     Embed `query` and return the top_k most relevant chunks.
@@ -88,27 +75,24 @@ def retrieve(query: str, top_k: int = 5) -> list[dict]:
         [query],
         convert_to_numpy=True,
         normalize_embeddings=True,
-    ).astype(np.float32)                     # shape: (1, 384)
+    ).astype(np.float32)                
 
-    # 2. Search FAISS — returns distances (cosine scores) + indices
     scores, indices = _faiss_index.search(query_vec, top_k)
-    scores  = scores[0]                      # shape: (top_k,)
-    indices = indices[0]                     # shape: (top_k,)
+    scores  = scores[0]                      
+    indices = indices[0]          
 
-    # 3. Collect results, filter by MIN_SCORE, deduplicate by source
     results = []
-    seen_sources = {}                        # source → best chunk already added
+    seen_sources = {}                      
 
     for score, idx in zip(scores, indices):
-        if idx == -1:                        # FAISS returns -1 for empty slots
+        if idx == -1:                    
             continue
-        if float(score) < MIN_SCORE:        # skip low-relevance chunks
+        if float(score) < MIN_SCORE:     
             continue
 
         chunk  = _chunks[idx]
         source = chunk["source"]
 
-        # Keep at most 2 chunks per disease source to stay balanced
         seen_sources[source] = seen_sources.get(source, 0) + 1
         if seen_sources[source] > 2:
             continue
@@ -143,7 +127,6 @@ def retrieve_for_diseases(query: str, diseases: list[str], top_k: int = 6) -> li
     if not candidates or not diseases:
         return candidates[:top_k]
 
-    # Normalise disease names for comparison (e.g. "Heart Disease" → "heart")
     flagged = {d.lower().split()[0] for d in diseases}
 
     # Split into boosted (disease source matches ML flags) and rest
@@ -172,10 +155,6 @@ def format_context(chunks: list[dict]) -> str:
 
     return "\n\n".join(parts)
 
-
-# ═════════════════════════════════════════════════════════════════
-# Quick self-test  (python -m rag.retriever)
-# ═════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     test_queries = [

@@ -1,4 +1,3 @@
-
 import io
 import re
 from pathlib import Path
@@ -12,46 +11,33 @@ import cv2
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# ── Tesseract configs ─────────────────────────────────────────────
+# ── Tesseract configs ───
 # PSM 4  = single column of text (good for lab report columns)
 # PSM 6  = uniform block (fallback)
 # PSM 11 = sparse text, no OSD (catches scattered values)
 TESS_PSM4  = '--oem 3 --psm 4  -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,:/-() '
 TESS_PSM11 = '--oem 3 --psm 11 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,:/-() '
 
-
-# ── Image preprocessing ───────────────────────────────────────────
-
 def _preprocess_image(img: Image.Image) -> Image.Image:
     """
     Multi-step preprocessing pipeline optimized for scanned lab reports.
     Uses OpenCV for deskewing and denoising — critical for scan accuracy.
     """
-    # 1. Fix EXIF orientation (phone photos)
     img = ImageOps.exif_transpose(img)
     img = img.convert('RGB')
 
-    # Convert to OpenCV format (numpy BGR)
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
-    # 2. Upscale to at least 2400px wide — Tesseract needs high DPI for accuracy
     h, w = cv_img.shape[:2]
     if w < 2400:
         scale = 2400 / w
         cv_img = cv2.resize(cv_img, (int(w * scale), int(h * scale)),
                             interpolation=cv2.INTER_CUBIC)
 
-    # 3. Convert to grayscale
     gray = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-
-    # 4. Denoise — removes scan artifacts and speckles
     gray = cv2.fastNlMeansDenoising(gray, h=10, templateWindowSize=7, searchWindowSize=21)
-
-    # 5. Deskew — fixes tilted scans (very common with phone photos)
     gray = _deskew(gray)
 
-    # 6. Adaptive thresholding — much better than global for uneven lighting in scans
-    #    This is the key fix for "extra garbage characters" from shadows/gradients
     binary = cv2.adaptiveThreshold(
         gray, 255,
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
@@ -60,7 +46,7 @@ def _preprocess_image(img: Image.Image) -> Image.Image:
         C=15            # constant subtracted from mean
     )
 
-    # 7. Remove small noise blobs (salt-and-pepper artifacts)
+    
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
     binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
 
@@ -79,13 +65,12 @@ def _deskew(gray: np.ndarray) -> np.ndarray:
         coords = np.column_stack(np.where(inverted > 0))
         angle = cv2.minAreaRect(coords)[-1]
 
-        # minAreaRect returns angles in [-90, 0) — normalize to [-45, 45]
+        
         if angle < -45:
             angle = -(90 + angle)
         else:
             angle = -angle
 
-        # Only correct if skew is significant (> 0.5 degrees) but not extreme
         if abs(angle) > 0.5 and abs(angle) < 45:
             h, w = gray.shape
             center = (w // 2, h // 2)
@@ -96,12 +81,9 @@ def _deskew(gray: np.ndarray) -> np.ndarray:
                 borderMode=cv2.BORDER_REPLICATE
             )
     except Exception:
-        pass  # If deskew fails, continue with original
+        pass 
 
     return gray
-
-
-# ── OCR with fallback ─────────────────────────────────────────────
 
 def _run_tesseract(img: Image.Image) -> str:
     """
@@ -111,14 +93,14 @@ def _run_tesseract(img: Image.Image) -> str:
     # Primary attempt: PSM 4 (single column — best for lab report layout)
     text = pytesseract.image_to_string(img, config=TESS_PSM4).strip()
 
-    # Quality check: if fewer than 100 chars or >30% non-alphanumeric → retry
+   
     alphanum = sum(c.isalnum() for c in text)
     total    = max(len(text), 1)
     garbage_ratio = 1 - (alphanum / total)
 
     if len(text) < 100 or garbage_ratio > 0.30:
         fallback = pytesseract.image_to_string(img, config=TESS_PSM11).strip()
-        # Keep whichever result is longer and cleaner
+        
         if len(fallback) > len(text):
             text = fallback
 
@@ -154,8 +136,6 @@ def _extract_pdf_via_ocr(pdf_bytes: bytes) -> str:
     images = convert_from_bytes(pdf_bytes, dpi=300, fmt='png', thread_count=2)
     return '\n\n'.join(_ocr_pil_image(img) for img in images)
 
-
-# ── Public API ────────────────────────────────────────────────────
 
 def extract_text_from_file(file_bytes: bytes, filename: str) -> str:
     ext = Path(filename).suffix.lower()
@@ -346,7 +326,7 @@ def parse_medical_parameters(text: str) -> dict:
     """
     params = {}
 
-    # Process line by line — this is the KEY fix for "values merging with wrong parameter"
+    
     lines = text.lower().splitlines()
     for line in lines:
         line = line.strip()
@@ -354,13 +334,13 @@ def parse_medical_parameters(text: str) -> dict:
             continue
         for pattern, name in PARAM_PATTERNS:
             if name in params:
-                continue  # Already found this parameter, skip
+                continue  
             match = re.search(pattern, line)
             if match:
                 raw = match.group(1).replace(',', '')
                 try:
                     params[name] = float(raw)
-                    break  # One match per line max
+                    break 
                 except ValueError:
                     pass
 

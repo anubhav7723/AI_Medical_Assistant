@@ -1,4 +1,3 @@
-
 import os
 import json
 import pickle
@@ -8,20 +7,20 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 
-# ── Paths ─────────────────────────────────────────────────────────
-BASE_DIR   = Path(__file__).parent          # backend/rag/
-DATA_DIR   = BASE_DIR / "data"              # backend/rag/data/
-INDEX_DIR  = BASE_DIR / "index"             # backend/rag/index/  (auto-created)
+# Paths 
+BASE_DIR   = Path(__file__).parent  
+DATA_DIR   = BASE_DIR / "data"          
+INDEX_DIR  = BASE_DIR / "index"         
 INDEX_DIR.mkdir(exist_ok=True)
 
 FAISS_PATH    = INDEX_DIR / "faiss.index"
-METADATA_PATH = INDEX_DIR / "chunks.pkl"   # list of {"text": ..., "source": ...}
+METADATA_PATH = INDEX_DIR / "chunks.pkl" 
 
-# ── Chunking config ───────────────────────────────────────────────
-CHUNK_SIZE    = 400   # characters per chunk
-CHUNK_OVERLAP = 80    # overlap between consecutive chunks
+# Chunking config
+CHUNK_SIZE    = 400   
+CHUNK_OVERLAP = 80   
 
-# ── Embedding model ───────────────────────────────────────────────
+# Embedding model 
 # all-MiniLM-L6-v2: lightweight (80 MB), 384-dim, great for medical Q&A retrieval
 EMBED_MODEL = None
 
@@ -75,7 +74,7 @@ def embed_chunks(chunks: list[dict], model: SentenceTransformer) -> np.ndarray:
         batch_size=64,
         show_progress_bar=True,
         convert_to_numpy=True,
-        normalize_embeddings=True,   # cosine similarity via inner product
+        normalize_embeddings=True, 
     )
     return embeddings.astype(np.float32)
 
@@ -87,7 +86,7 @@ def build_faiss_index(embeddings: np.ndarray) -> faiss.Index:
     For larger corpora switch to IndexIVFFlat or IndexHNSWFlat.
     """
     dim   = embeddings.shape[1]
-    index = faiss.IndexFlatIP(dim)   # IP = Inner Product
+    index = faiss.IndexFlatIP(dim) 
     index.add(embeddings)
     print(f"  🗂️  FAISS index built: {index.ntotal} vectors, dim={dim}")
     return index
@@ -98,13 +97,11 @@ def main():
     print("  MedAI — FAISS Ingestion Pipeline")
     print("=" * 55)
 
-    # 1. Load txt files
     print("\n[1/4] Loading disease documents …")
     documents = load_txt_files(DATA_DIR)
     if not documents:
         raise FileNotFoundError(f"No .txt files found in {DATA_DIR}")
 
-    # 2. Chunk all documents
     print(f"\n[2/4] Chunking (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP}) …")
     all_chunks: list[dict] = []
     for doc in documents:
@@ -113,12 +110,10 @@ def main():
         all_chunks.extend(chunks)
     print(f"  Total chunks: {len(all_chunks)}")
 
-    # 3. Load embedding model and embed
     print(f"\n[3/4] Loading embedding model …")
     model      = get_model()
     embeddings = embed_chunks(all_chunks, model)
 
-    # 4. Build FAISS index and save artifacts
     print("\n[4/4] Building FAISS index and saving …")
     index = build_faiss_index(embeddings)
 
@@ -129,7 +124,6 @@ def main():
         pickle.dump(all_chunks, f)
     print(f"  💾 Chunk metadata saved → {METADATA_PATH}")
 
-    # Summary
     print("\n" + "=" * 55)
     print("  ✅ Ingestion complete!")
     print(f"     Documents : {len(documents)}")

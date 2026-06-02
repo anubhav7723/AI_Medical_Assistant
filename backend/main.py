@@ -21,14 +21,12 @@ except Exception as e:
     def retrieve_for_diseases(q, d, top_k=5): return []
     def format_context(chunks): return "No knowledge base available."
 
-# ── App setup ─────────────────────────────────────────────────────
 app = FastAPI(
     title="MedAI Backend",
     description="Medical Report Analysis API",
     version="1.0.0",
 )
 
-# Allow requests from React dev server (change in production)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000"],
@@ -37,8 +35,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# ── ML model loader ───────────────────────────────────────────────
 import joblib
 
 MODELS_DIR = Path("ml_models/models")
@@ -51,37 +47,29 @@ def load_model(name: str):
             return joblib.load(path)
     raise FileNotFoundError(f"Model '{name}' not found in {MODELS_DIR}")
 
-# Load all 4 models at startup — adjust names to match your saved files
 try:
     model_anemia   = load_model("anemia/anemia_rf_model")
     model_diabetes = load_model("diabetes/diabetes_xgboost_model")
     model_heart    = load_model("heart/cardio_xgboost_calibrated")
     model_liver    = load_model("liver/liver_lgbm_calibrated")
-    # model_infection  = load_model("infection")
     print("✅ All ML models loaded successfully")
 except FileNotFoundError as e:
     print(f"⚠️  {e} — prediction for that model will return error")
     model_anemia = model_diabetes = model_heart = model_liver = model_infection = None
 
 
-# ── Pydantic schemas ──────────────────────────────────────────────
-
 class PredictRequest(BaseModel):
-    text: str                        # raw OCR text
-
+    text: str                        
 class SummarizeRequest(BaseModel):
-    text: str                        # raw OCR text
-    predictions: list[dict[str, Any]] # output from /predict
+    text: str                        
+    predictions: list[dict[str, Any]] 
 
 class ChatMessage(BaseModel):
-    role: str                        # 'user' or 'assistant'
+    role: str                  
     content: str
 
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
-
-
-# ── Helper: build feature vector from parsed params ───────────────
 
 def build_feature_vector(params: dict, feature_names: list) -> list:
     """
@@ -90,22 +78,18 @@ def build_feature_vector(params: dict, feature_names: list) -> list:
     """
     return [params.get(name, np.nan) for name in feature_names]
 
-
-# ── Routes ────────────────────────────────────────────────────────
-
+# Routes
 @app.get("/")
 def health_check():
     return {"status": "ok", "message": "MedAI backend is running"}
 
 
-# ── 1. OCR ────────────────────────────────────────────────────────
 @app.post("/ocr")
 async def ocr_endpoint(file: UploadFile = File(...)):
     """
     Accepts a PDF or image file.
     Returns extracted text + parsed medical parameters.
     """
-    # Validate content type
     allowed = {
         "application/pdf",
         "image/png", "image/jpeg", "image/jpg",
@@ -117,13 +101,11 @@ async def ocr_endpoint(file: UploadFile = File(...)):
             detail=f"Unsupported file type '{file.content_type}'. Upload a PDF or image."
         )
 
-    # Read file bytes
     try:
         file_bytes = await file.read()
     except Exception:
         raise HTTPException(status_code=400, detail="Could not read uploaded file.")
 
-    # Run extraction
     try:
         text = extract_text_from_file(file_bytes, file.filename)
     except ValueError as e:
@@ -136,7 +118,6 @@ async def ocr_endpoint(file: UploadFile = File(...)):
             detail="Internal OCR error. Please try again with a clearer image."
         )
 
-    # Also parse structured parameters
     params = parse_medical_parameters(text)
 
     return {
@@ -156,7 +137,6 @@ async def ocr_debug(file: UploadFile = File(...)):
         "parsed_params": params,  # See what the regex matched
         "lines": text.splitlines() # Line-by-line view
     }
-# ── 2. Predict ────────────────────────────────────────────────────
 
 def debias_probability(prob: float) -> float:
     if prob < 15:
@@ -183,7 +163,6 @@ def predict_endpoint(body: PredictRequest):
         )
 
     predictions = []
-    # ── Feature lists must match EXACTLY what each model was trained on ──────────
     ANEMIA_FEATURES = [
     "Hemoglobin", "RBC", "WBC", "Platelets",
     "Hematocrit", "MCV", "MCH", "MCHC",
@@ -192,8 +171,8 @@ def predict_endpoint(body: PredictRequest):
     ]
 
     DIABETES_FEATURES = [
-        "HbA1c",           # parser returns "HbA1c"  ← was "HbA1c_level"  (mismatch fixed)
-        "Fasting Glucose",  # parser returns "Fasting Glucose" ← was "blood_glucose_level" (mismatch fixed)
+        "HbA1c",           
+        "Fasting Glucose",  
         "BMI",
         "Gender", "Age", "Hypertension", "heart_disease", "smoking_history"
     ]
@@ -212,10 +191,6 @@ def predict_endpoint(body: PredictRequest):
         "cardio", "hypertension"
     ]
 
-    # INFECTION_FEATURES = [
-    #     "WBC", "Neutrophils", "Lymphocytes", "CRP", "Platelets",
-    #     # Add remaining features
-    # ]
     print("PARAMS KEYS:", list(params.keys()))
     print("LIVER FEATURES:", LIVER_FEATURES)
     def run_model(model, model_name, disease_name, feature_names, algo_name):
@@ -225,16 +200,15 @@ def predict_endpoint(body: PredictRequest):
                 raise RuntimeError("Model not loaded")
 
             features = []
-            found_count = 0                          # ← NEW: track how many params exist in report
+            found_count = 0  
             for name in feature_names:
                 val = params.get(name)
                 if val is not None and not (isinstance(val, float) and np.isnan(val)):
-                    found_count += 1                 # ← NEW: this param was actually in the report
+                    found_count += 1
                     features.append(float(val))
                 else:
                     features.append(0.0)
 
-            # ← NEW: skip this disease entirely if no relevant params found in report
             if found_count == 0:
                 return {"disease": disease_name, "score": None, "skip": True}
 
@@ -252,12 +226,10 @@ def predict_endpoint(body: PredictRequest):
     predictions.append(run_model(model_diabetes,  "diabetes",  "Diabetes",     DIABETES_FEATURES,  "XGBoost"))
     predictions.append(run_model(model_heart,     "heart",     "Heart Disease",HEART_FEATURES,     "XGBoost"))
     predictions.append(run_model(model_liver,     "liver",     "Liver Disease",LIVER_FEATURES,     "LightGBM"))
-    # predictions.append(run_model(model_infection, "infection", "Infection Risk",INFECTION_FEATURES, "Random Forest"))
 
     return {"predictions": predictions, "parameters_used": params}
 
 
-# ── 3. Summarize ──────────────────────────────────────────────────
 @app.post("/summarize")
 def summarize_endpoint(body: SummarizeRequest):
     from groq import Groq
@@ -291,7 +263,6 @@ def summarize_endpoint(body: SummarizeRequest):
     if not raw or not raw.strip():
         raise HTTPException(status_code=500, detail="Model returned an empty response")
 
-    # Strip markdown code fences if present
     raw = re.sub(r"```json\s*|\s*```", "", raw).strip()
 
     try:
@@ -299,9 +270,6 @@ def summarize_endpoint(body: SummarizeRequest):
     except json.JSONDecodeError:
         return {"summary": raw}
 
-
-
-# ── 4. Chat (Mediee) ──────────────────────────────────────────────
 @app.post("/chat")
 def chat_endpoint(body: ChatRequest):
     """
@@ -317,18 +285,12 @@ def chat_endpoint(body: ChatRequest):
  
     client = Groq(api_key=os.environ["GROQ_API_KEY"])
  
-    # ── 1. Get the latest user message ───────────────────────────
     user_messages = [m for m in body.messages if m.role == "user"]
     if not user_messages:
         raise HTTPException(status_code=400, detail="No user message found.")
  
     latest_query = user_messages[-1].content
- 
-    # ── 2. Extract ML context injected by frontend ────────────────
-    # Convention: the FIRST message with role="system" carries
-    # a JSON blob of ML predictions + report summary.
-    # Format expected (frontend sends this once at conversation start):
-    #   {"ml_predictions": [...], "report_summary": "...", "parameters": {...}}
+
     ml_context_str = ""
     active_diseases = []
  
@@ -336,8 +298,7 @@ def chat_endpoint(body: ChatRequest):
         if m.role == "system" and m.content.strip().startswith("{"):
             try:
                 ctx = json.loads(m.content)
- 
-                # Build a readable ML predictions block
+
                 preds = ctx.get("ml_predictions", [])
                 if preds:
                     lines = []
@@ -351,12 +312,10 @@ def chat_endpoint(body: ChatRequest):
                     if lines:
                         ml_context_str += "ML Risk Predictions:\n" + "\n".join(lines)
  
-                # Add report summary if present
                 summary = ctx.get("report_summary", "")
                 if summary:
                     ml_context_str += f"\n\nReport Summary:\n{summary}"
  
-                # Add key parameters if present
                 params = ctx.get("parameters", {})
                 if params:
                     if isinstance(params, dict):
@@ -369,16 +328,14 @@ def chat_endpoint(body: ChatRequest):
  
             except (json.JSONDecodeError, KeyError):
                 pass
-            break  # only read the first system message
+            break
  
-    # ── 3. RAG retrieval ─────────────────────────────────────────
     rag_chunks  = retrieve_for_diseases(latest_query, active_diseases, top_k=5)
     print(f"🔍 RAG chunks retrieved: {len(rag_chunks)}")  # ← ADD THIS
     for c in rag_chunks:
         print(f"   [{c['source']}] score={c['score']} | {c['text'][:80]}")
     rag_context = format_context(rag_chunks)
  
-    # ── 4. Build system prompt ───────────────────────────────────
     system_prompt = f"""You are Mediee, an intelligent medical assistant built to help users understand their medical reports.
  
 You have access to three knowledge sources — use ALL of them when relevant:
@@ -402,9 +359,7 @@ INSTRUCTIONS
 - Only add "Always consult your doctor before making any health decisions." when giving medical advice, not on every message.
 - Never diagnose. Never prescribe. Explain and guide only.
 """
- 
-    # ── 5. Build conversation history for Groq ───────────────────
-    # Filter out the system context message (already embedded in system_prompt)
+
     history = [
         {"role": m.role, "content": m.content}
         for m in body.messages
@@ -415,13 +370,12 @@ INSTRUCTIONS
         {"role": "system", "content": system_prompt},
         *history,
     ]
- 
-    # ── 6. Call Groq ─────────────────────────────────────────────
+
     try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=groq_messages,
-            temperature=0.4,      # lower = more factual, less creative
+            temperature=0.4,    
             max_tokens=200,
         )
         reply = response.choices[0].message.content
@@ -431,8 +385,7 @@ INSTRUCTIONS
             status_code=502,
             detail=f"LLM call failed: {str(e)}"
         )
- 
-    # ── 7. Return reply + which chunks were used (for debugging) ──
+
     return {
         "reply": reply,
         "rag_sources": [

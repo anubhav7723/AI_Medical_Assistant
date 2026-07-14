@@ -1,38 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-const BASE = import.meta.env.VITE_API_URL ?? `${import.meta.env.VITE_API_URL}`;
-
-async function sendMessage(messages) {
-  // Build the messages array to send
-  // If report context exists, prepend it as a system message
-  const payload = [];
- 
-  if (reportContext) {
-    payload.push({
-      role: 'system',
-      content: JSON.stringify({
-        ml_predictions:  reportContext.predictions  ?? [],
-        report_summary:  reportContext.summary      ?? '',
-        parameters:      reportContext.parameters   ?? {},
-      }),
-    });
-  }
- 
-  // Add conversation history (skip any existing system messages)
-  payload.push(...messages.filter(m => m.role !== 'system'));
- 
-  const res = await fetch(`${BASE}/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: payload }),
-  });
- 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail ?? `Chat failed (HTTP ${res.status})`);
-  }
-  return res.json(); // { reply, rag_sources }
-}
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 export default function Chatbot({ reportContext = null }) {
 

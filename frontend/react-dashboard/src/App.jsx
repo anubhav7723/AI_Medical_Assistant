@@ -6,7 +6,7 @@ import SummarySection  from '../components/SummarySection';
 import { extractText }     from '../services/ocrService';
 import { predictRisk }     from '../services/riskService';
 import { summarizeReport } from '../services/summaryService';
-import Chatbot from '../components/Chatbot';
+import Chatbot from '../components/ChatBot';
 
 export default function App() {
   // ── File ─────────────────────────────────────────────────────

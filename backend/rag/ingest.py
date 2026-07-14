@@ -37,7 +37,7 @@ def load_txt_files(data_dir: Path) -> list[dict]:
     for path in sorted(data_dir.glob("*.txt")):
         text = path.read_text(encoding="utf-8")
         documents.append({"source": path.stem, "text": text})
-        print(f"  📄 Loaded: {path.name}  ({len(text):,} chars)")
+        print(f"  [File] Loaded: {path.name}  ({len(text):,} chars)")
     return documents
 
 
@@ -68,7 +68,7 @@ def chunk_document(doc: dict, chunk_size: int, overlap: int) -> list[dict]:
 def embed_chunks(chunks: list[dict], model: SentenceTransformer) -> np.ndarray:
     """Embed all chunk texts; return float32 array shape (N, dim)."""
     texts = [c["text"] for c in chunks]
-    print(f"\n  🔢 Embedding {len(texts)} chunks …")
+    print(f"\n  [Embed] Embedding {len(texts)} chunks ...")
     embeddings = model.encode(
         texts,
         batch_size=64,
@@ -88,7 +88,7 @@ def build_faiss_index(embeddings: np.ndarray) -> faiss.Index:
     dim   = embeddings.shape[1]
     index = faiss.IndexFlatIP(dim) 
     index.add(embeddings)
-    print(f"  🗂️  FAISS index built: {index.ntotal} vectors, dim={dim}")
+    print(f"  [Index] FAISS index built: {index.ntotal} vectors, dim={dim}")
     return index
 
 
@@ -102,30 +102,30 @@ def main():
     if not documents:
         raise FileNotFoundError(f"No .txt files found in {DATA_DIR}")
 
-    print(f"\n[2/4] Chunking (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP}) …")
+    print(f"\n[2/4] Chunking (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP}) ...")
     all_chunks: list[dict] = []
     for doc in documents:
         chunks = chunk_document(doc, CHUNK_SIZE, CHUNK_OVERLAP)
-        print(f"  ✂️  {doc['source']}: {len(chunks)} chunks")
+        print(f"  [Chunk] {doc['source']}: {len(chunks)} chunks")
         all_chunks.extend(chunks)
     print(f"  Total chunks: {len(all_chunks)}")
 
-    print(f"\n[3/4] Loading embedding model …")
+    print(f"\n[3/4] Loading embedding model ...")
     model      = get_model()
     embeddings = embed_chunks(all_chunks, model)
 
-    print("\n[4/4] Building FAISS index and saving …")
+    print("\n[4/4] Building FAISS index and saving ...")
     index = build_faiss_index(embeddings)
 
     faiss.write_index(index, str(FAISS_PATH))
-    print(f"  💾 FAISS index saved  → {FAISS_PATH}")
+    print(f"  [Save] FAISS index saved  → {FAISS_PATH}")
 
     with open(METADATA_PATH, "wb") as f:
         pickle.dump(all_chunks, f)
-    print(f"  💾 Chunk metadata saved → {METADATA_PATH}")
+    print(f"  [Save] Chunk metadata saved → {METADATA_PATH}")
 
     print("\n" + "=" * 55)
-    print("  ✅ Ingestion complete!")
+    print("  [OK] Ingestion complete!")
     print(f"     Documents : {len(documents)}")
     print(f"     Chunks    : {len(all_chunks)}")
     print(f"     Embedding : {embeddings.shape[1]}-dim")

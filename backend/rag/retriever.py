@@ -30,17 +30,17 @@ def _load_artifacts():
             f"Expected files:\n  {FAISS_PATH}\n  {METADATA_PATH}"
         )
 
-    print("  🔍 Loading FAISS index …")
+    print("  [Search] Loading FAISS index ...")
     index = faiss.read_index(str(FAISS_PATH))
 
-    print("  📦 Loading chunk metadata …")
+    print("  [Metadata] Loading chunk metadata ...")
     with open(METADATA_PATH, "rb") as f:
         chunks: list[dict] = pickle.load(f)
 
-    print(f"  🤖 Loading embedding model…")
+    print(f"  [Model] Loading embedding model...")
     model = get_model()
 
-    print(f"  ✅ Retriever ready — {index.ntotal} vectors indexed")
+    print(f"  [OK] Retriever ready - {index.ntotal} vectors indexed")
     return index, chunks, model
 
 
@@ -49,7 +49,7 @@ try:
     _faiss_index, _chunks, _embed_model = _load_artifacts()
     RETRIEVER_READY = True
 except FileNotFoundError as e:
-    print(f"\n⚠️  RAG retriever NOT ready: {e}\n")
+    print(f"\n[Warning] RAG retriever NOT ready: {e}\n")
     _faiss_index = _chunks = _embed_model = None
     RETRIEVER_READY = False
 
@@ -172,6 +172,6 @@ if __name__ == "__main__":
         print(f"\n🔎 Query: {q}")
         results = retrieve(q, top_k=3)
         if not results:
-            print("  ⚠️  No results (run ingest.py first)")
+            print("  [Warning] No results (run ingest.py first)")
         for r in results:
             print(f"  [{r['source']}] score={r['score']}  {r['text'][:120].strip()} …")

@@ -8,8 +8,14 @@ from pdf2image import convert_from_bytes
 from PIL import Image, ImageFilter, ImageEnhance, ImageOps
 import numpy as np
 import cv2
+import sys
+import os
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Default fallback path on Windows. On Linux/macOS, Tesseract is expected to be in system PATH.
+if sys.platform.startswith("win32"):
+    tesseract_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    if os.path.exists(tesseract_path):
+        pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
 # ── Tesseract configs ───
 # PSM 4  = single column of text (good for lab report columns)
@@ -270,21 +276,13 @@ PARAM_PATTERNS = [
     (r's\.?g\.?[o0]\.?t\s*[:\-]?\s*([\d.]+)',                  'AST'),          # handles S.G.O.T and S.G.0.T (zero/O confusion)
     (r'aspartate\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)',  'AST'),
 
-    (r'\bast\b\s*[:\-]?\s*([\d.]+)',                            'AST'),
-    (r'\bsgot\b\s*[:\-]?\s*([\d.]+)',                           'AST'),  # SGOT alias (common in Indian reports)
-    (r'aspartate\s*(?:amino)?transferase\s*[:\-]?\s*([\d.]+)',  'AST'),
-
     (r'(?:total\s*)?bilirubin\s*[:\-]?\s*([\d.]+)',             'Bilirubin'),
     (r'serum\s*bilirubin\s*[:\-]?\s*([\d.]+)',                  'Bilirubin'),
     (r'bilirubin\w*\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',    'Bilirubin'),  # merged: "BilirubinTotal 0.2-1.00 ---0.87"
 
-    (r'albumin\s*[:\-]?\s*([\d.]+)',                            'Albumin'),
-    (r'serum\s*albumin\s*[:\-]?\s*([\d.]+)',                    'Albumin'),
-    (r'albumin\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',         'Albumin'),    # merged: "Albumin 3.5-5.5 ---4.22"
-    
-    (r'alubumin\s*[:\-]?\s*([\d.]+)',                            'Albumin'),
-    (r'serum\s*alubumin\s*[:\-]?\s*([\d.]+)',                    'Albumin'),
-    (r'alubumin\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',         'Albumin'),    # merged: "Albumin 3.5-5.5 ---4.22"
+    (r'alub?umin\s*[:\-]?\s*([\d.]+)',                          'Albumin'),
+    (r'serum\s*alub?umin\s*[:\-]?\s*([\d.]+)',                  'Albumin'),
+    (r'alub?umin\s+[\d.]+[-\s]+[\d.]+\s+[-\s]*([\d.]+)',        'Albumin'),    # merged: "Albumin 3.5-5.5 ---4.22"
 
 
     (r'total\s*prot(?:e[iy]n)?s?\s*[:\-]?\s*([\d.]+)',         'Total Protein'),

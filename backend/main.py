@@ -1,5 +1,4 @@
 import os
-import traceback
 from pathlib import Path
 from typing import Any
 import numpy as np
@@ -16,14 +15,14 @@ try:
     from rag.retriever import retrieve_for_diseases, format_context
     RAG_READY = True
 except Exception as e:
-    print(f"⚠️  RAG not loaded: {e}")
+    print(f"[Warning] RAG not loaded: {e}")
     RAG_READY = False
     def retrieve_for_diseases(q, d, top_k=5): return []
     def format_context(chunks): return "No knowledge base available."
 
 app = FastAPI(
     title="MedAI Backend",
-    description="Medical Report Analysis API",
+    description="Medical AI Assistant API",
     version="1.0.0",
 )
 
@@ -37,7 +36,7 @@ app.add_middleware(
 
 import joblib
 
-MODELS_DIR = Path("ml_models/models")
+MODELS_DIR = Path(__file__).parent / "ml_models" / "models"
 
 def load_model(name: str):
     """Load a .joblib or .pkl model by name from ml_models/models/."""
@@ -52,10 +51,10 @@ try:
     model_diabetes = load_model("diabetes/diabetes_xgboost_model")
     model_heart    = load_model("heart/cardio_xgboost_calibrated")
     model_liver    = load_model("liver/liver_lgbm_calibrated")
-    print("✅ All ML models loaded successfully")
+    print("[OK] All ML models loaded successfully")
 except FileNotFoundError as e:
-    print(f"⚠️  {e} — prediction for that model will return error")
-    model_anemia = model_diabetes = model_heart = model_liver = model_infection = None
+    print(f"[Warning] {e} — prediction for that model will return error")
+    model_anemia = model_diabetes = model_heart = model_liver = None
 
 
 class PredictRequest(BaseModel):
